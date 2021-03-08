@@ -2,9 +2,9 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
-app.get('/', function (request, response) {
-  response.sendFile(path.join(__dirname + '/public/html/index.html'));
-});
+//по умолчанию  приложение ищет статические файлы в папке /public
+app.use(express.static('public')); // serving static files (HTML, js, CSS)
+
 
 app.get('/api/getChannels', function (request, response) {
   const channels = ['aaa', 'bbb', 'ccc'];
