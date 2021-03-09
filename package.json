@@ -18,6 +18,7 @@
   "homepage": "https://github.com/paraketsova/slack-clone-node-mongodb#readme",
   "dependencies": {
     "experss": "^0.0.1-security",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
   }
 }
