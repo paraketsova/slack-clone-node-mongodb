@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function (e) {
   const root = document.getElementById('root');
 
   //----UserInfo----
-
   let userArticle = document.createElement('div');
   root.appendChild(userArticle);
 
@@ -24,17 +23,19 @@ document.addEventListener("DOMContentLoaded", function (e) {
       });
 
   //----Channels----
+  let channelsArticle = document.createElement('div');
+  root.appendChild(channelsArticle);
 
   let listChennelsTitle = document.createElement('p');
   listChennelsTitle.innerText = ("List of channels:");
-  root.appendChild(listChennelsTitle);
+  channelsArticle.appendChild(listChennelsTitle);
 
-  const btnLoad = document.createElement('button');
-  btnLoad.id = 'btnLoad';
-  btnLoad.innerHTML = 'Load';
-  root.appendChild(btnLoad);
+  const btnLoadCh = document.createElement('button');
+  btnLoadCh.id = 'btnLoadCh';
+  btnLoadCh.innerHTML = 'Load channels';
+  channelsArticle.appendChild(btnLoadCh);
 
-  btnLoad.addEventListener('click', (event) => {
+  btnLoadCh.addEventListener('click', (event) => {
 
     let link = ('/api/getChannels');
     fetch(link)
@@ -43,11 +44,36 @@ document.addEventListener("DOMContentLoaded", function (e) {
         channels.forEach(element => {
           let listChannels = document.createElement('p');
           listChannels.innerText = element;
-          root.appendChild(listChannels);
+          channelsArticle.appendChild(listChannels);
         })
       });
-
   })
 
- 
+  //---Messages----//
+  let messagesArticle = document.createElement('div');
+  root.appendChild(messagesArticle);
+
+  const btnLoadMess = document.createElement('button');
+  btnLoadMess.id = 'btnLoadMess';
+  btnLoadMess.innerHTML = 'Load all messages';
+  messagesArticle.appendChild(btnLoadMess);
+
+  btnLoadMess.addEventListener('click', (event) => {
+
+    let messLink = ('/api/getMessages');
+    fetch(messLink)
+      .then(response => response.json())
+      .then(messages => {      
+        messages.forEach(element => {
+          let message = renderMessage(element);
+          messagesArticle.appendChild(message);
+        })
+      });
+  })
 });
+
+const renderMessage = (obj) => {
+  const m = document.createElement('div');
+  m.innerHTML = obj.text;
+  return m;
+};

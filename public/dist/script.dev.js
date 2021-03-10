@@ -19,14 +19,16 @@ document.addEventListener("DOMContentLoaded", function (e) {
     });
   }); //----Channels----
 
+  var channelsArticle = document.createElement('div');
+  root.appendChild(channelsArticle);
   var listChennelsTitle = document.createElement('p');
   listChennelsTitle.innerText = "List of channels:";
-  root.appendChild(listChennelsTitle);
-  var btnLoad = document.createElement('button');
-  btnLoad.id = 'btnLoad';
-  btnLoad.innerHTML = 'Load';
-  root.appendChild(btnLoad);
-  btnLoad.addEventListener('click', function (event) {
+  channelsArticle.appendChild(listChennelsTitle);
+  var btnLoadCh = document.createElement('button');
+  btnLoadCh.id = 'btnLoadCh';
+  btnLoadCh.innerHTML = 'Load channels';
+  channelsArticle.appendChild(btnLoadCh);
+  btnLoadCh.addEventListener('click', function (event) {
     var link = '/api/getChannels';
     fetch(link).then(function (response) {
       return response.json();
@@ -34,8 +36,32 @@ document.addEventListener("DOMContentLoaded", function (e) {
       channels.forEach(function (element) {
         var listChannels = document.createElement('p');
         listChannels.innerText = element;
-        root.appendChild(listChannels);
+        channelsArticle.appendChild(listChannels);
+      });
+    });
+  }); //---Messages----//
+
+  var messagesArticle = document.createElement('div');
+  root.appendChild(messagesArticle);
+  var btnLoadMess = document.createElement('button');
+  btnLoadMess.id = 'btnLoadMess';
+  btnLoadMess.innerHTML = 'Load all messages';
+  messagesArticle.appendChild(btnLoadMess);
+  btnLoadMess.addEventListener('click', function (event) {
+    var messLink = '/api/getMessages';
+    fetch(messLink).then(function (response) {
+      return response.json();
+    }).then(function (messages) {
+      messages.forEach(function (element) {
+        var message = renderMessage(element);
+        messagesArticle.appendChild(message);
       });
     });
   });
 });
+
+var renderMessage = function renderMessage(obj) {
+  var m = document.createElement('div');
+  m.innerHTML = obj.text;
+  return m;
+};
