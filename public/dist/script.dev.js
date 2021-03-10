@@ -15,9 +15,13 @@ document.addEventListener("DOMContentLoaded", function (e) {
     fetch(link).then(function (response) {
       return response.json();
     }).then(function (commits) {
-      alert(commits[0]);
-      listChannels.innerText = commits[1];
-      root.appendChild(listChannels);
+      /* alert(commits[0]); */
+      commits.forEach(function (element) {
+        console.log(element);
+        var listChannels = document.createElement('p');
+        listChannels.innerText = element;
+        root.appendChild(listChannels);
+      });
     });
   });
 });

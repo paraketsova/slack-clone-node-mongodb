@@ -22,10 +22,14 @@ document.addEventListener("DOMContentLoaded", function (e) {
     fetch(link)
       .then(response => response.json())
       .then(commits => {
-        alert(commits[0]);
-
-        listChannels.innerText = commits[1]; 
-        root.appendChild(listChannels);
+        /* alert(commits[0]); */
+        commits.forEach(element => {
+          console.log(element);
+          let listChannels = document.createElement('p');
+          listChannels.innerText = element;
+          root.appendChild(listChannels);
+        })
+          
 
       });
 

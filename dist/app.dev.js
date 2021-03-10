@@ -13,4 +13,9 @@ app.get('/api/getChannels', function (request, response) {
   var channels = ['aaa', 'bbb', 'ccc'];
   response.json(channels);
 });
+/* app.get('/api/getUser', function (request, response) {
+  const user = ['Mariia', 'Paraketsova', 'ponka'];
+  response.json(user);
+}); */
+
 app.listen(3000);
