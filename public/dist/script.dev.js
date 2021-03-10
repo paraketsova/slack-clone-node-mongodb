@@ -62,6 +62,17 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
 var renderMessage = function renderMessage(obj) {
   var m = document.createElement('div');
-  m.innerHTML = obj.text;
+  var mFrom = document.createElement('p');
+  mFrom.innerHTML = obj.from;
+  m.appendChild(mFrom);
+  var mTo = document.createElement('p');
+  mTo.innerHTML = obj.to;
+  m.appendChild(mTo);
+  var mDate = document.createElement('p');
+  mDate.innerHTML = obj.date;
+  m.appendChild(mDate);
+  var mText = document.createElement('div');
+  mText.innerHTML = obj.text;
+  m.appendChild(mText);
   return m;
 };

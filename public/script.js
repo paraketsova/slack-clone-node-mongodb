@@ -73,7 +73,20 @@ document.addEventListener("DOMContentLoaded", function (e) {
 });
 
 const renderMessage = (obj) => {
-  const m = document.createElement('div');
-  m.innerHTML = obj.text;
+  const m =  document.createElement('div');
+
+  const mFrom = document.createElement('p');
+  mFrom.innerHTML = obj.from;
+  m.appendChild(mFrom);
+  const mTo = document.createElement('p');
+  mTo.innerHTML = obj.to;
+  m.appendChild(mTo);
+  const mDate = document.createElement('p');
+  mDate.innerHTML = obj.date;
+  m.appendChild(mDate);
+  const mText = document.createElement('div');
+  mText.innerHTML = obj.text;
+  m.appendChild(mText);
+
   return m;
 };
