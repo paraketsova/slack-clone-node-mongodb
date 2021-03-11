@@ -26,9 +26,9 @@ document.addEventListener("DOMContentLoaded", function (e) {
   let channelsArticle = document.createElement('div');
   root.appendChild(channelsArticle);
 
-  let listChennelsTitle = document.createElement('p');
-  listChennelsTitle.innerText = ("List of channels:");
-  channelsArticle.appendChild(listChennelsTitle);
+  let listChannelsTitle = document.createElement('p');
+  listChannelsTitle.innerText = ("List of channels:");
+  channelsArticle.appendChild(listChannelsTitle);
 
   const btnLoadCh = document.createElement('button');
   btnLoadCh.id = 'btnLoadCh';
@@ -42,10 +42,17 @@ document.addEventListener("DOMContentLoaded", function (e) {
       .then(response => response.json())
       .then(channels => {      
         channels.forEach(element => {
-          let channel = document.createElement('p');
-          channel.id = element.id;
-          channel.innerHTML = element.name;
+          let channel = document.createElement('input');
           channelsArticle.appendChild(channel);
+          channel.type = 'radio';
+          channel.id = element.id;
+          channel.name = 'listChannel'; // skapar en namn för alla radiobutton 
+          channel.value = 'text';
+
+          let channelLabel = document.createElement('label'); //  skapar label till input för att väljer 5 frågor 
+          channelLabel.setAttribute('for', channel.id);
+          channelLabel.innerText = element.name;
+          channelsArticle.appendChild(channelLabel);
         })
       });
   })
@@ -74,18 +81,18 @@ document.addEventListener("DOMContentLoaded", function (e) {
 });
 
 const renderMessage = (obj) => {
-  const m =  document.createElement('div');
+  const m =  document.createElement('ul');
 
-  const mFrom = document.createElement('p');
+  const mFrom = document.createElement('li');
   mFrom.innerHTML = obj.from;
   m.appendChild(mFrom);
-  const mTo = document.createElement('p');
+  const mTo = document.createElement('li');
   mTo.innerHTML = obj.to;
   m.appendChild(mTo);
-  const mDate = document.createElement('p');
+  const mDate = document.createElement('li');
   mDate.innerHTML = obj.date;
   m.appendChild(mDate);
-  const mText = document.createElement('div');
+  const mText = document.createElement('li');
   mText.innerHTML = obj.text;
   m.appendChild(mText);
 
