@@ -21,12 +21,6 @@ app.get('/api/getUser', function (request, response) {
 app.get('/api/getMessages/:channelId', (request, response) => {
   const channelId = request.params.channelId; //use route parameters. The captured values are populated in the req.params object, with the name of the route parameter specified in the path as their respective keys.
   response.json(messages.filter(message => message.channelId == channelId));
-
-/*   let message = messages.filter(message => message.channelId == channelId);
-
-  if (message.length > 0) {
-    response.send()
-  } */
 })
 
 app.listen(3000);
@@ -121,9 +115,3 @@ let messages = [
     "text": "AAA! What do you call someone with no nose? Nobody knows."
   }
 ];
-
-/* function getFakeMessages(storageX) {
-  return storageX
-}
-
-let messages = getFakeMessages(messagesStorageA);//TEST for one channel */

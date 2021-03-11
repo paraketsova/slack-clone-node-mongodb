@@ -22,11 +22,6 @@ app.get('/api/getMessages/:channelId', function (request, response) {
   response.json(messages.filter(function (message) {
     return message.channelId == channelId;
   }));
-  /*   let message = messages.filter(message => message.channelId == channelId);
-  
-    if (message.length > 0) {
-      response.send()
-    } */
 });
 app.listen(3000); //--Fake channels, messages storage--//
 
@@ -107,8 +102,3 @@ var messages = [{
   "date": "1997-12-17T03:24:00",
   "text": "AAA! What do you call someone with no nose? Nobody knows."
 }];
-/* function getFakeMessages(storageX) {
-  return storageX
-}
-
-let messages = getFakeMessages(messagesStorageA);//TEST for one channel */

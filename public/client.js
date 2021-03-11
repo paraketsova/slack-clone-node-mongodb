@@ -47,6 +47,7 @@ const loadChannels = () => {
 const loadChannelMessages = (channelId) => {
   let messagesContainer = document.getElementById('messages');
   
+
   fetch(`/api/getMessages/${channelId}`)
     .then(response => response.json())
     .then(messages => {      
