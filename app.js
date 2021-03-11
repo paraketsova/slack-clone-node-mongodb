@@ -9,7 +9,7 @@ app.use(express.static('public')); // serving static files (HTML, js, CSS)
 
 
 app.get('/api/getChannels', function (request, response) {
-  const channels = ['aaa', 'bbb', 'ccc'];
+  
   response.json(channels);
 });
 
@@ -19,12 +19,26 @@ app.get('/api/getUser', function (request, response) {
 });
 
 app.get('/api/getMessages', (request, response) => {
-  
   response.json(messages);
 })
 
 app.listen(3000);
 
+//--Fake channels, messages storage--//
+const channels = [ 
+  { "id": "1",
+    "name": "aaa",
+    "description": "This is a A channel"
+  }, 
+  { "id": "2",
+    "name": "bbb",
+    "description": "This is a B channel"
+  }, 
+  { "id": "3",
+    "name": "ccc",
+    "description": "This is a C channel"
+  }
+];
 
 let messagesStorageA = [
   {

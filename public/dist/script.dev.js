@@ -34,9 +34,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
       return response.json();
     }).then(function (channels) {
       channels.forEach(function (element) {
-        var listChannels = document.createElement('p');
-        listChannels.innerText = element;
-        channelsArticle.appendChild(listChannels);
+        var channel = document.createElement('p');
+        channel.id = element.id;
+        channel.innerHTML = element.name;
+        channelsArticle.appendChild(channel);
       });
     });
   }); //---Messages----//

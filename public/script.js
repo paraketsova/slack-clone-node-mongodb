@@ -42,9 +42,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
       .then(response => response.json())
       .then(channels => {      
         channels.forEach(element => {
-          let listChannels = document.createElement('p');
-          listChannels.innerText = element;
-          channelsArticle.appendChild(listChannels);
+          let channel = document.createElement('p');
+          channel.id = element.id;
+          channel.innerHTML = element.name;
+          channelsArticle.appendChild(channel);
         })
       });
   })

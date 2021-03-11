@@ -10,7 +10,6 @@ var path = require('path'); //по умолчанию  приложение ищ
 app.use(express["static"]('public')); // serving static files (HTML, js, CSS)
 
 app.get('/api/getChannels', function (request, response) {
-  var channels = ['aaa', 'bbb', 'ccc'];
   response.json(channels);
 });
 app.get('/api/getUser', function (request, response) {
@@ -20,7 +19,21 @@ app.get('/api/getUser', function (request, response) {
 app.get('/api/getMessages', function (request, response) {
   response.json(messages);
 });
-app.listen(3000);
+app.listen(3000); //--Fake channels, messages storage--//
+
+var channels = [{
+  "id": "1",
+  "name": "aaa",
+  "description": "This is a A channel"
+}, {
+  "id": "2",
+  "name": "bbb",
+  "description": "This is a B channel"
+}, {
+  "id": "3",
+  "name": "ccc",
+  "description": "This is a C channel"
+}];
 var messagesStorageA = [{
   "from": "Anna",
   "to": "Boris",
