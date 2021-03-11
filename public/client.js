@@ -31,7 +31,7 @@ const loadChannels = () => {
         let channelLink = document.createElement('a'); //  skapar label till input för att väljer 5 frågor 
         channelLink.addEventListener('click', (event) =>  {
           event.preventDefault();
-          loadChannelMessages(channel.id);
+          loadChannelMessages(element.id);
         });
         channelLink.href = '#'; // TODO: remove after adding CSS
         channelLink.innerText = element.name;
@@ -46,8 +46,8 @@ const loadChannels = () => {
 
 const loadChannelMessages = (channelId) => {
   let messagesContainer = document.getElementById('messages');
-
-  fetch('/api/getMessages')
+  
+  fetch(`/api/getMessages/${channelId}`)
     .then(response => response.json())
     .then(messages => {      
       messagesContainer.innerHTML = '';
