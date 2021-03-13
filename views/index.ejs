@@ -14,12 +14,18 @@
  
   </div>
 
-  <div id="rootMess"></div>
-    <h3>Messages:</h3>
-    <p>From: <%= user.username %></p>
-    <p>Channel: <%= channel.name %></p>
-    <p><%= timestamp %></p>
-    <p><%= text %></p>
+  <div id="messagesContainer"></div>
+    <strong>Messages:</strong>
+    <ul>
+      <% messages.forEach( message => { %>
+        <li>
+          <p>From: <%= message.user.username %></p>
+          <p>Channel: <%= message.channel.name %></p>
+          <p><%= message.timestamp %></p>
+          <p><%= message.text %></p>
+        </li>
+      <% }) %>
+    </ul>
   </div>
 
   </h1>

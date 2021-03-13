@@ -15,17 +15,15 @@ app.get('/mdb', (request, response) => {
   const MessageModel = require('./models/message');
 
   MessageModel
-  .findOne({
-    text: "My dog used to chase people on a bike a lot. It got so bad I had to take his bike away"
-  })
+  .find()
   .populate(['channel', 'user']) //populates the channel id with actual channel info
-  .exec((error, message) => {
+  .exec((error, messages) => {
     if (error) {
       return handleError(error);
     }
 
-    console.log(message);
-    response.render("index.ejs", message)
+    console.log(messages);
+    response.render("index.ejs", {messages})
   }) 
   
 });
