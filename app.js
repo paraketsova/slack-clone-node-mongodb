@@ -14,18 +14,24 @@ app.get('/mdb', (request, response) => {
   const ChannelModel = require('./models/channel');
   const MessageModel = require('./models/message');
 
-  MessageModel
+  ChannelModel
   .find()
-  .populate(['channel', 'user']) //populates the channel id with actual channel info
-  .exec((error, messages) => {
+  .exec((error, channels) => {
     if (error) {
       return handleError(error);
     }
+    MessageModel
+    .find()
+    .populate(['channel', 'user']) //populates the channel id with actual channel info
+    .exec((error, messages) => {
+      if (error) {
+        return handleError(error);
+      }
 
-    console.log(messages);
-    response.render("index.ejs", {messages})
-  }) 
-  
+      console.log(messages);
+      response.render("index.ejs", {channels, messages})
+    })
+  })
 });
 
 db.on('error', error => {

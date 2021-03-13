@@ -11,7 +11,13 @@
   <div id="root1">
     <h3>User Info:</h3>
     <h3>Channels:</h3>
- 
+    <ul>
+      <% channels.forEach( channel => { %>
+        <li>
+          <p>From: <%= channel.name %></p>
+        </li>
+      <% }) %>
+    </ul>
   </div>
 
   <div id="messagesContainer"></div>
