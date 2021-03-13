@@ -18,7 +18,22 @@ app.get('/mdb', function (request, response) {
 
   var MessageModel = require('./models/message');
 
-  response.render('index.ejs');
+  MessageModel.findOne({
+    text: "My dog used to chase people on a bike a lot. It got so bad I had to take his bike away"
+  }, function (error, message) {
+    if (error) {
+      return handleError(error);
+    }
+
+    console.log(message);
+    response.render("index.ejs", messages);
+  });
+  /*  
+    ChannelModel.find()
+      .exec((error, channels) => {
+      if (error) return handleError(error)
+      response.render('index.ejs', { channel })
+    }) */
 });
 db.on('error', function (error) {
   console.log(error);
