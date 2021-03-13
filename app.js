@@ -14,16 +14,18 @@ app.get('/mdb', (request, response) => {
   const ChannelModel = require('./models/channel');
   const MessageModel = require('./models/message');
 
-  MessageModel.findOne({
+  MessageModel
+  .findOne({
     text: "My dog used to chase people on a bike a lot. It got so bad I had to take his bike away"
-  }, (error, message) => {
-      if (error) {
-        return handleError(error);
-      }
+  })
+  .exec((error, message) => {
+    if (error) {
+      return handleError(error);
+    }
 
-      console.log(message);
-      response.render("index.ejs", message)
-    })
+    console.log(message);
+    response.render("index.ejs", message)
+  }) 
   
 });
 
