@@ -20,7 +20,7 @@ db.on('error', error => {
 })
 
 //=============//
-/* 
+
 //по умолчанию  приложение ищет статические файлы в папке /public
 app.use(express.static('public')); // serving static files (HTML, js, CSS)
 
@@ -39,7 +39,7 @@ app.get('/api/getMessages/:channelId', (request, response) => {
   const channelId = request.params.channelId; //use route parameters. The captured values are populated in the req.params object, with the name of the route parameter specified in the path as their respective keys.
   response.json(messages.filter(message => message.channelId == channelId));
 })
- */
+
 app.listen(3000);
 
 //--Fake channels, messages storage--//

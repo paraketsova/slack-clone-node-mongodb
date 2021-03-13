@@ -62,7 +62,7 @@ function messageCreate(user, channel, timestamp, text, cb) {
         user: user,
         channel: channel,
         timestamp: timestamp,
-        text: text
+        text: text,
     }
     if (user != false) messagedetail.user = user
     if (channel != false) messagedetail.channel = channel
@@ -127,13 +127,13 @@ function createUsersChannels(cb) {
 function createMessages(cb) {
   async.parallel([
     function (callback) {
-      messageCreate(users[0], channels[0], "1995-12-17T03:22:00", 'My dog used to chase people on a bike a lot. It got so bad I had to take his bike away', callback);
+      messageCreate(users[0], channels[0], "2021-03-02 13:14:51", 'My dog used to chase people on a bike a lot. It got so bad I had to take his bike away', callback);
     },
     function (callback) {
-      messageCreate(users[1], channels[1], "1996-12-17T03:22:00", 'What kind of magic do cows believe in? MOODOO.', callback);
+      messageCreate(users[1], channels[1], "2021-03-02 13:14:52", 'What kind of magic do cows believe in? MOODOO.', callback);
     },
     function (callback) {
-      messageCreate(users[2], channels[2], "1997-12-17T03:22:00", 'What do you call someone with no nose? Nobody knows', callback);
+      messageCreate(users[2], channels[2], "2021-03-02 13:14:55", 'What do you call someone with no nose? Nobody knows', callback);
     },
       
   ],
