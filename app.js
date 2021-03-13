@@ -18,6 +18,7 @@ app.get('/mdb', (request, response) => {
   .findOne({
     text: "My dog used to chase people on a bike a lot. It got so bad I had to take his bike away"
   })
+  .populate(['channel', 'user']) //populates the channel id with actual channel info
   .exec((error, message) => {
     if (error) {
       return handleError(error);
