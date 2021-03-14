@@ -7,33 +7,40 @@
   <title>Info from MongoDB</title>
 </head>
 <body>
-  <h2>Slack-clon</h2>
-  <div id="root1">
-    <h3>User Info:</h3>
-    <h3>Channels:</h3>
-    <ul>
-      <% channels.forEach( channel => { %>
-        <li>
-          <p>From: <%= channel.name %></p>
-        </li>
-      <% }) %>
-    </ul>
+  
+  <div id="root">
+    
+    <div id="dashboard">
+      <h2>Slack-clon</h2>
+      <div id = userInfo>
+        <h3>User Info:</h3>
+      </div>
+      
+      <div id="channelsContainer">
+        <h3>Channels:</h3>
+      <ul>
+        <% channels.forEach( channel => { %>
+          <li>
+            <p>From: <%= channel.name %></p>
+          </li>
+        <% }) %>
+      </ul>
+      </div>  
+    </div>
+  
+    <div id="messagesContainer"></div>
+      <strong>Messages:</strong>
+      <ul>
+        <% messages.forEach( message => { %>
+          <li>
+            <p>From: <%= message.user.username %></p>
+            <p>Channel: <%= message.channel.name %></p>
+            <p><%= message.timestamp %></p>
+            <p><%= message.text %></p>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
   </div>
-
-  <div id="messagesContainer"></div>
-    <strong>Messages:</strong>
-    <ul>
-      <% messages.forEach( message => { %>
-        <li>
-          <p>From: <%= message.user.username %></p>
-          <p>Channel: <%= message.channel.name %></p>
-          <p><%= message.timestamp %></p>
-          <p><%= message.text %></p>
-        </li>
-      <% }) %>
-    </ul>
-  </div>
-
-  </h1>
 </body>
 </html>
