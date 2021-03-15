@@ -16,21 +16,21 @@
         <h3>User Info:</h3>
       </div>
       
-      <div id="channelsContainer">
+      <div id="channels">
         <h3>Channels:</h3>
-      <ul>
+      <ul id="channelsContainer">
         <% channels.forEach( channel => { %>
-          <li>
-            <p>From: <%= channel.name %></p>
+          <li id="channelUnit">
+            
           </li>
         <% }) %>
       </ul>
       </div>  
     </div>
   
-    <div id="messagesContainer"></div>
+    <div id="messages"></div>
       <strong>Messages:</strong>
-      <ul>
+      <ul  id="messagesContainer">
         <% messages.forEach( message => { %>
           <li>
             <p>From: <%= message.user.username %></p>

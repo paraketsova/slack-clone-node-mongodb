@@ -4,43 +4,55 @@ var express = require('express');
 
 var app = express();
 
-var path = require('path'); //==== DB ===//
+var path = require('path'); //??
+
+
+var async = require("async"); //??
+//==== DB ===//
 
 
 var mongoose = require('mongoose');
 
-var connection = mongoose.connect('mongodb://localhost:27017/slackClone');
+var connection = mongoose.connect('mongodb://localhost:27017/slackClone', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(function () {
+  return console.log('connected...');
+})["catch"](function (err) {
+  return console.log(err);
+});
 var db = mongoose.connection;
+db.on('error', function (error) {
+  console.log(error);
+});
+
+var UserModel = require('./models/user');
+
+var ChannelModel = require('./models/channel');
+
+var MessageModel = require('./models/message');
+
+app.use(express["static"](__dirname + "/public"));
 app.get('/mdb', function (request, response) {
-  var UserModel = require('./models/user');
-
-  var ChannelModel = require('./models/channel');
-
-  var MessageModel = require('./models/message');
-
-  MessageModel.findOne({
-    text: "My dog used to chase people on a bike a lot. It got so bad I had to take his bike away"
-  }, function (error, message) {
+  ChannelModel.find().exec(function (error, channels) {
     if (error) {
       return handleError(error);
     }
 
-    console.log(message);
-    response.render("index.ejs", messages);
-  });
-  /*  
-    ChannelModel.find()
-      .exec((error, channels) => {
-      if (error) return handleError(error)
-      response.render('index.ejs', { channel })
-    }) */
-});
-db.on('error', function (error) {
-  console.log(error);
-}); //=============//
-//по умолчанию  приложение ищет статические файлы в папке /public
+    MessageModel.find().populate(['channel', 'user']) //populates the channel id with actual channel info
+    .exec(function (error, messages) {
+      if (error) {
+        return handleError(error);
+      }
 
-app.use(express["static"]('public')); // serving static files (HTML, js, CSS)
+      console.log(messages);
+      response.render("index.ejs", {
+        channels: channels,
+        messages: messages
+      });
+    });
+  });
+}); //====================//
 
 app.get('/api/getChannels', function (request, response) {
   response.json(channels);
@@ -52,86 +64,38 @@ app.get('/api/getUser', function (request, response) {
 app.get('/api/getMessages/:channelId', function (request, response) {
   var channelId = request.params.channelId; //use route parameters. The captured values are populated in the req.params object, with the name of the route parameter specified in the path as their respective keys.
 
+  MessageModel.find({
+    'name.last': 'Ghost'
+  }, 'name occupation', function (err, person) {
+    if (err) return handleError(err); // Prints "Space Ghost is a talk show host".
+
+    console.log('%s %s is a %s.', person.name.first, person.name.last, person.occupation);
+  }); //======?????
+  // const messages = db.get('messages');
+  // const channels = db.get('channels');
+
+  /*  ChannelModel
+   .find()
+   .exec((error, channels) => {
+     if (error) {
+       return handleError(error);
+     }
+     MessageModel
+     .find()
+     .populate(['channel', 'user']) //populates the channel id with actual channel info
+     .exec((error, messages) => {
+       if (error) {
+         return handleError(error);
+       }
+        console.log(messages);
+       response.render("index.ejs", {channels, messages})
+     })
+   })
+  */
+  //====????
+
   response.json(messages.filter(function (message) {
-    return message.channelId == channelId;
+    return message.channel == channelId;
   }));
 });
-app.listen(3000); //--Fake channels, messages storage--//
-
-var channels = [{
-  "id": "1",
-  "name": "aaa",
-  "description": "This is a A channel"
-}, {
-  "id": "2",
-  "name": "bbb",
-  "description": "This is a B channel"
-}, {
-  "id": "3",
-  "name": "ccc",
-  "description": "This is a C channel"
-}];
-var messages = [{
-  "id": "001",
-  "channelId": "1",
-  "from": "Anna",
-  "to": "Boris",
-  "date": "1995-12-17T03:22:00",
-  "text": "My dog used to chase people on a bike a lot. It got so bad I had to take his bike away."
-}, {
-  "id": "002",
-  "channelId": "1",
-  "from": "Boris",
-  "to": "Carla",
-  "date": "1995-12-17T03:23:00",
-  "text": "What kind of magic do cows believe in? MOODOO."
-}, {
-  "id": "003",
-  "channelId": "1",
-  "from": "Carla",
-  "to": "Dastin",
-  "date": "1995-12-17T03:24:00",
-  "text": "What do you call someone with no nose? Nobody knows."
-}, {
-  "id": "004",
-  "channelId": "2",
-  "from": "Babba",
-  "to": "Cirano",
-  "date": "1996-12-17T03:22:00",
-  "text": "Your dog used to chase people on a bike a lot. It got so bad I had to take his bike away."
-}, {
-  "id": "005",
-  "channelId": "2",
-  "from": "Cirano",
-  "to": "Dimitriy",
-  "date": "1996-12-17T03:23:00",
-  "text": "Do you know what kind of magic do cows believe in? MOODOO."
-}, {
-  "id": "006",
-  "channelId": "2",
-  "from": "Dimitriy",
-  "to": "Elena",
-  "date": "1996-12-17T03:24:00",
-  "text": "Ou! What do you call someone with no nose? Nobody knows."
-}, {
-  "id": "007",
-  "channelId": "3",
-  "from": "Carabas",
-  "to": "Dinamo",
-  "date": "1997-12-17T03:22:00",
-  "text": "His dog used to chase people on a bike a lot. It got so bad I had to take his bike away."
-}, {
-  "id": "008",
-  "channelId": "3",
-  "from": "Dinamo",
-  "to": "Elanius",
-  "date": "1997-12-17T03:23:00",
-  "text": "Does he know what kind of magic do cows believe in? MOODOO."
-}, {
-  "id": "009",
-  "channelId": "3",
-  "from": "Elanius",
-  "to": "Alba",
-  "date": "1997-12-17T03:24:00",
-  "text": "AAA! What do you call someone with no nose? Nobody knows."
-}];
+app.listen(3000);

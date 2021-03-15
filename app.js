@@ -1,21 +1,36 @@
 const express = require('express');
-const app = express();
-const path = require('path'); //??
-var async = require("async"); //??
+const path = require('path');
+const async = require('async');
 
 
 //==== DB ===//
 
 const mongoose = require('mongoose');
-const connection = mongoose.connect('mongodb://localhost:27017/slackClone');
+const connection = mongoose.connect('mongodb://localhost:27017/slackClone', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}) 
+  .then(() => console.log('connected...'))
+  .catch(err => console.log(err));
+
 const db = mongoose.connection;
 
+db.on('error', error => {
+  console.log(error);
+})
+
+const UserModel = require('./models/user');
+const ChannelModel = require('./models/channel');
+const MessageModel = require('./models/message');
+
+
+//==== App ====//
+
+const app = express();
+
+app.use(express.static(__dirname + "/public"));
 
 app.get('/mdb', (request, response) => {
-  const UserModel = require('./models/user');
-  const ChannelModel = require('./models/channel');
-  const MessageModel = require('./models/message');
-
   ChannelModel
   .find()
   .exec((error, channels) => {
@@ -36,22 +51,8 @@ app.get('/mdb', (request, response) => {
   })
 });
 
-db.on('error', error => {
-  console.log(error)
-  })
-
-
-
-app.listen(3000);
-
-//=============//
-/*
-//по умолчанию  приложение ищет статические файлы в папке /public
- app.use(express.static('public')); // serving static files (HTML, js, CSS)
-
-
-app.get('/api/getChannels', function (request, response) {
-  
+app.get('/api/getChannels', async function (request, response) {
+  const channels = await ChannelModel.find().exec();
   response.json(channels);
 });
 
@@ -60,7 +61,13 @@ app.get('/api/getUser', function (request, response) {
   response.json(user);
 });
 
-app.get('/api/getMessages/:channelId', (request, response) => {
-  const channelId = request.params.channelId; //use route parameters. The captured values are populated in the req.params object, with the name of the route parameter specified in the path as their respective keys.
-  response.json(messages.filter(message => message.channelId == channelId));
-}) */
+app.get('/api/getMessages/:channelId', async (request, response) => {
+  // Use route parameters. The captured values are populated in the req.params object, 
+  // with the name of the route parameter specified in the path as their respective keys.
+  const channelId = request.params.channelId; 
+
+  const messages = await MessageModel.find({ channel: { _id: channelId } }).exec();
+  response.json(messages);
+})
+
+app.listen(3000);

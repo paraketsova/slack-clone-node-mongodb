@@ -22,7 +22,7 @@ const loadUserInfo = () => {
 const loadChannels = () => {
   let channelsContainer = document.getElementById('channels');
 
-  fetch('/api/getChannels')
+  fetch('/api/getChannels') 
     .then(response => response.json())
     .then(channels => {      
       channelsContainer.innerHTML = '';
@@ -31,7 +31,7 @@ const loadChannels = () => {
         let channelLink = document.createElement('a'); //  skapar label till input för att väljer 5 frågor 
         channelLink.addEventListener('click', (event) =>  {
           event.preventDefault();
-          loadChannelMessages(element.id);
+          loadChannelMessages(element._id);
         });
         channelLink.href = '#'; // TODO: remove after adding CSS
         channelLink.innerText = element.name;
@@ -70,7 +70,7 @@ const renderMessage = (obj) => {
   mTo.innerHTML = obj.to;
   m.appendChild(mTo);
   const mDate = document.createElement('li');
-  mDate.innerHTML = obj.date;
+  mDate.innerHTML = obj.timestamp;
   m.appendChild(mDate);
   const mText = document.createElement('li');
   mText.innerHTML = obj.text;
