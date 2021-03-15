@@ -66,7 +66,9 @@ app.get('/api/getMessages/:channelId', async (request, response) => {
   // with the name of the route parameter specified in the path as their respective keys.
   const channelId = request.params.channelId; 
 
-  const messages = await MessageModel.find({ channel: { _id: channelId } }).exec();
+  const messages = await MessageModel.find({ channel: { _id: channelId } })
+  .populate(['channel', 'user'])
+  .exec();
   response.json(messages);
 })
 

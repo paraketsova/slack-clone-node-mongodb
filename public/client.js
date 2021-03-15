@@ -64,11 +64,11 @@ const renderMessage = (obj) => {
   const m =  document.createElement('ul');
 
   const mFrom = document.createElement('li');
-  mFrom.innerHTML = obj.from;
+  mFrom.innerHTML = obj.user.username;
   m.appendChild(mFrom);
-  const mTo = document.createElement('li');
+/*   const mTo = document.createElement('li');
   mTo.innerHTML = obj.to;
-  m.appendChild(mTo);
+  m.appendChild(mTo); */
   const mDate = document.createElement('li');
   mDate.innerHTML = obj.timestamp;
   m.appendChild(mDate);
