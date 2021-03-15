@@ -27,8 +27,8 @@ var users = []
 var channels = []
 var messages = []
 
-function userCreate(username, firstname, lastname, cb) {
-    userdetail = { username: username, firstname: firstname, lastname: lastname }
+function userCreate(username, firstname, lastname, email, cb) {
+    userdetail = { username: username, firstname: firstname, lastname: lastname, email: email }
 
     var user = new User(userdetail);
 
@@ -83,31 +83,31 @@ function messageCreate(user, channel, timestamp, text, cb) {
 function createUsersChannels(cb) {
   async.series([
     function (callback) {
-      userCreate('AnnaB', 'Anna', 'Bothfuss', callback);
+      userCreate('AnnaB', 'Anna', 'Bothfuss', 'anna_b@gmail.com', callback);
     },
     function (callback) {
-      userCreate('BorisC', 'Boris', 'Cova', callback);
+      userCreate('BorisC', 'Boris', 'Cova', 'boris_c@gmail.com', callback);
     },
     function (callback) {
-      userCreate('CarlaD','Carla', 'Dmitrov', callback);
+      userCreate('CarlaD','Carla', 'Dmitrov', 'carlaD@gmail.com', callback);
     },
     function (callback) {
-      userCreate('BobD','Babba', 'Crichevsky', callback);
+      userCreate('BobD','Bob', 'Crichevsky', 'bob_c@gmail.com', callback);
     },
     function (callback) {
-      userCreate('CiranoD','Cirano','de Bergerac', callback);
+      userCreate('CiranoD','Cirano','de Bergerac', 'cirano_d@gmail.com', callback);
     },
     function (callback) {
-      userCreate('DimitriyE','Dimitriy', 'Essensson', callback);
+      userCreate('DimitriyE','Dimitriy', 'Essensson', 'dima_e@gmail.com', callback);
     },
     function (callback) {
-      userCreate('CalipsoD','Calipso', 'Dyesy', callback);
+      userCreate('CalipsoD','Calipso', 'Dyesy', 'calipso_d@gmail.com', callback);
     },
     function (callback) {
-      userCreate('DrontE','Dront', 'Eliminatus', callback);
+      userCreate('DrontE','Dront', 'Eliminatus', 'dront_E@gmail.com', callback);
     },
     function (callback) {
-      userCreate('ElenaA','Elena', 'Aconit', callback);
+      userCreate('ElenaA','Elena', 'Aconit', 'elena_a@gmail.com', callback);
     },
     function (callback) {
       channelCreate('channel_1', callback);

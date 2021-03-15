@@ -72,4 +72,6 @@ app.get('/api/getMessages/:channelId', async (request, response) => {
   response.json(messages);
 })
 
+//----Passport ----//
+
 app.listen(3000);
