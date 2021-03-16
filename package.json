@@ -18,10 +18,15 @@
   "homepage": "https://github.com/paraketsova/slack-clone-node-mongodb#readme",
   "dependencies": {
     "async": "^0.9.2",
+    "bcrypt": "^5.0.1",
+    "connect-flash": "^0.1.1",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "express-static": "^1.2.6",
     "mongoose": "^5.11.19",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
   }
 }

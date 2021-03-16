@@ -35,7 +35,7 @@ app.get('/mdb', (request, response) => {
   .find()
   .exec((error, channels) => {
     if (error) {
-      return handleError(error);
+      return handleError(error);                        
     }
     MessageModel
     .find()
@@ -56,8 +56,9 @@ app.get('/api/getChannels', async function (request, response) {
   response.json(channels);
 });
 
-app.get('/api/getUser', function (request, response) {
-  const user = ['Mariia', 'Paraketsova', 'ponka'];
+app.get('/api/getUser', async function (request, response) {
+  const userId = request.params.userId; 
+  const user = await UserModel.findOne({user: { _id: userId } }).exec();
   response.json(user);
 });
 
@@ -73,5 +74,35 @@ app.get('/api/getMessages/:channelId', async (request, response) => {
 })
 
 //----Passport ----//
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+passport.use(new LocalStrategy(
+  {
+    usernameField: 'email', // to name at html form
+    passwordField: 'passwd'
+  },
+  function(username, password, done) {
+    UserModel.findOne({username: username}, function(error, user) {
+      if (error) {
+        return done(error)
+      }
+      if  (!user) {
+        return done(null, false, { message: 'Incorrect username.' })
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect pasword.' })
+      }
+    })
+  }
+))
+
+app.post('login', passport.authenticate('local', { // = analog app.post (request, response)
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+}))
+
+//---
 
 app.listen(3000);
