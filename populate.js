@@ -27,8 +27,8 @@ var users = []
 var channels = []
 var messages = []
 
-function userCreate(username, firstname, lastname, email, cb) {
-    userdetail = { username: username, firstname: firstname, lastname: lastname, email: email }
+function userCreate(username, firstname, lastname, email, password, cb) {
+    userdetail = { username: username, firstname: firstname, lastname: lastname, email: email, password: password }
 
     var user = new User(userdetail);
 
@@ -83,31 +83,31 @@ function messageCreate(user, channel, timestamp, text, cb) {
 function createUsersChannels(cb) {
   async.series([
     function (callback) {
-      userCreate('AnnaB', 'Anna', 'Bothfuss', 'anna_b@gmail.com', callback);
+      userCreate('AnnaB', 'Anna', 'Bothfuss', 'anna_b@gmail.com', 'A01', callback);
     },
     function (callback) {
-      userCreate('BorisC', 'Boris', 'Cova', 'boris_c@gmail.com', callback);
+      userCreate('BorisC', 'Boris', 'Cova', 'boris_c@gmail.com', 'B01', callback);
     },
     function (callback) {
-      userCreate('CarlaD','Carla', 'Dmitrov', 'carlaD@gmail.com', callback);
+      userCreate('CarlaD','Carla', 'Dmitrov', 'carlaD@gmail.com', 'C01', callback);
     },
     function (callback) {
-      userCreate('BobD','Bob', 'Crichevsky', 'bob_c@gmail.com', callback);
+      userCreate('BobD','Bob', 'Crichevsky', 'bob_c@gmail.com', 'B01', callback);
     },
     function (callback) {
-      userCreate('CiranoD','Cirano','de Bergerac', 'cirano_d@gmail.com', callback);
+      userCreate('CiranoD','Cirano','de Bergerac', 'cirano_d@gmail.com', 'C01', callback);
     },
     function (callback) {
-      userCreate('DimitriyE','Dimitriy', 'Essensson', 'dima_e@gmail.com', callback);
+      userCreate('DimitriyE','Dimitriy', 'Essensson', 'dima_e@gmail.com', 'D01', callback);
     },
     function (callback) {
-      userCreate('CalipsoD','Calipso', 'Dyesy', 'calipso_d@gmail.com', callback);
+      userCreate('CalipsoD','Calipso', 'Dyesy', 'calipso_d@gmail.com', 'C01', callback);
     },
     function (callback) {
-      userCreate('DrontE','Dront', 'Eliminatus', 'dront_E@gmail.com', callback);
+      userCreate('DrontE','Dront', 'Eliminatus', 'dront_E@gmail.com', 'D01', callback);
     },
     function (callback) {
-      userCreate('ElenaA','Elena', 'Aconit', 'elena_a@gmail.com', callback);
+      userCreate('ElenaA','Elena', 'Aconit', 'elena_a@gmail.com', 'Enna01', callback);
     },
     function (callback) {
       channelCreate('channel_1', callback);
