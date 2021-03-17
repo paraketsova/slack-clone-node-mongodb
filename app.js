@@ -90,6 +90,11 @@ app.get('/login', function(req, res) {
 
 app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true }));
 
+app.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/login');
+});
+
 app.get('/mdb', (request, response) => {
   ChannelModel
   .find()
