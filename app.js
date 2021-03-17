@@ -78,11 +78,51 @@ app.use(express.urlencoded({ extended: true })); // support encoded bodies
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', ensureAuthenticated, function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/index.html'));
+app.get('/', function(req, res) {
+  if (req.isAuthenticated()) {
+    res.sendFile(path.join(__dirname + '/public/index.html'));
+  } else {
+    res.sendFile(path.join(__dirname + '/public/index-unauthenticated.html'));
+  }
 });
 
 app.use(express.static(__dirname + '/public'));
+
+
+app.get('/signup', function(req, res) {
+  res.render('signup.ejs', { signupError: req.flash('error') });
+});
+
+app.post('/signup', function(req, res) {
+  const { username, firstname, lastname, email, password } = req.body;
+
+  let errors = [];
+
+  if (!username || !firstname || !lastname || !email || !password) {
+    errors.push("Please fill out all fields");
+  }
+
+  if (password.length < 6) {
+    errors.push("Use at least 6 characters for your password");
+  }
+
+  if (errors.length > 0) {
+    res.render('signup.ejs', { errors, username, firstname, lastname, email, password });
+  } else {
+    const User = require('./models/user');
+    const newUser = new User({ username, firstname, lastname, email, password });
+
+    newUser.save()
+      .then((user) => {
+        // Automatically log in the user after successful sign up
+        req.login(user, function(err) {
+          if (err) { return next(err); }
+          return res.redirect('/');
+        });
+      })
+      .catch(error => console.log(error));
+  }
+});
 
 app.get('/login', function(req, res) {
   res.render('login.ejs', { loginError: req.flash('error') });
@@ -92,7 +132,7 @@ app.post('/login', passport.authenticate('local', { successRedirect: '/', failur
 
 app.get('/logout', function(req, res) {
   req.logout();
-  res.redirect('/login');
+  res.redirect('/');
 });
 
 app.get('/mdb', (request, response) => {
