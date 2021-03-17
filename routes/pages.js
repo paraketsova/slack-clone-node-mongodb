@@ -1,4 +1,6 @@
 const path = require('path');
+const ChannelModel = require('../models/channel');
+const MessageModel = require('../models/message');
 
 const PageRoutes = {};
 
