@@ -9,11 +9,8 @@ const loadUserInfo = () => {
 
   fetch('/api/getMe')
     .then(response => response.json())
-    .then(user => {      
-      userContainer.innerHTML = '';
-      let userUsername = document.createElement('p');
-      userUsername.innerText = user.username;
-      userContainer.appendChild(userUsername);
+    .then(user => {
+      userContainer.innerHTML = `${user.username} <br> ${user.firstname} ${user.lastname} <br> ${user.email}`;
     });
 };
 

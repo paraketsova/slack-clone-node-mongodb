@@ -117,9 +117,7 @@ app.get('/api/getChannels', ensureAuthenticated, async function (request, respon
 });
 
 app.get('/api/getMe', ensureAuthenticated, async function (request, response) {
-  const username = 'AnnaB';  // TODO: update when session info is available
-  const user = await UserModel.findOne({ username: username }).exec();
-  response.json(user);
+  response.json(request.user);
 });
 
 app.get('/api/getUser/:username', ensureAuthenticated, async function (request, response) {
