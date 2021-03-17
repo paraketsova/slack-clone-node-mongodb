@@ -1,4 +1,6 @@
 const express = require('express');
+const flash = require('connect-flash');
+const session = require('express-session');
 const path = require('path');
 const async = require('async');
 
@@ -24,11 +26,69 @@ const ChannelModel = require('./models/channel');
 const MessageModel = require('./models/message');
 
 
+//==== Passport ====//
+
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    // TODO: add support for logging in with email    
+    UserModel.findOne({ username: username }, function(error, user) {
+      if (error) {
+        return done(error);
+      }
+      if  (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (password !== user.password) {
+        return done(null, false, { message: 'Incorrect pasword.' });
+      }
+      return done(null, user);
+    })
+  }
+));
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  UserModel.findOne({ _id: id }, function(error, user) {
+    done(error, user);
+  });
+});
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.redirect('/login');
+  }
+}
+
 //==== App ====//
 
 const app = express();
 
-app.use(express.static(__dirname + "/public"));
+app.use(session({ secret: 'ponies' }));
+app.use(flash());
+app.use(express.json()); // support json encoded bodies
+app.use(express.urlencoded({ extended: true })); // support encoded bodies
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('/', ensureAuthenticated, function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/index.html'));
+});
+
+app.use(express.static(__dirname + '/public'));
+
+app.get('/login', function(req, res) {
+  res.render('login.ejs', { loginError: req.flash('error') });
+});
+
+app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true }));
 
 app.get('/mdb', (request, response) => {
   ChannelModel
@@ -46,64 +106,37 @@ app.get('/mdb', (request, response) => {
       }
 
       console.log(messages);
-      response.render("index.ejs", {channels, messages})
+      response.render('mdb.ejs', { channels, messages });
     })
   })
 });
 
-app.get('/api/getChannels', async function (request, response) {
+app.get('/api/getChannels', ensureAuthenticated, async function (request, response) {
   const channels = await ChannelModel.find().exec();
   response.json(channels);
 });
 
-app.get('/api/getUser', async function (request, response) {
-  const userId = request.params.userId; 
-  const user = await UserModel.findOne({user: { _id: userId } }).exec();
+app.get('/api/getMe', ensureAuthenticated, async function (request, response) {
+  const username = 'AnnaB';  // TODO: update when session info is available
+  const user = await UserModel.findOne({ username: username }).exec();
   response.json(user);
 });
 
-app.get('/api/getMessages/:channelId', async (request, response) => {
+app.get('/api/getUser/:username', ensureAuthenticated, async function (request, response) {
+  const username = request.params.username; 
+  const user = await UserModel.findOne({ username: username }).exec();
+  response.json(user);
+});
+
+app.get('/api/getMessages/:channelId', ensureAuthenticated, async (request, response) => {
   // Use route parameters. The captured values are populated in the req.params object, 
   // with the name of the route parameter specified in the path as their respective keys.
   const channelId = request.params.channelId; 
 
   const messages = await MessageModel.find({ channel: { _id: channelId } })
-  .populate(['channel', 'user'])
-  .exec();
+    .populate(['user'])
+    .exec();
   response.json(messages);
-})
-
-//----Passport ----//
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-
-passport.use(new LocalStrategy(
-  {
-    usernameField: 'email', // to name at html form
-    passwordField: 'passwd'
-  },
-  function(username, password, done) {
-    UserModel.findOne({username: username}, function(error, user) {
-      if (error) {
-        return done(error)
-      }
-      if  (!user) {
-        return done(null, false, { message: 'Incorrect username.' })
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect pasword.' })
-      }
-      return done(null, user);
-    })
-  }
-))
-
-app.post('login', passport.authenticate('local', { // = analog app.post (request, response)
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true
-}))
-
-//---
+});
 
 app.listen(3000);

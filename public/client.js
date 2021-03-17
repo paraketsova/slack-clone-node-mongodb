@@ -5,17 +5,15 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
 const loadUserInfo = () => {
   let userContainer = document.getElementById('userinfo');
+  
 
-  fetch('/api/getUser')
+  fetch('/api/getMe')
     .then(response => response.json())
-    .then(userInfo => {      
+    .then(user => {      
       userContainer.innerHTML = '';
-
-      userInfo.forEach(element => {
-        let userInfoUnit = document.createElement('p');
-        userInfoUnit.innerText = element;
-        userContainer.appendChild(userInfoUnit);
-      })
+      let userUsername = document.createElement('p');
+      userUsername.innerText = user.username;
+      userContainer.appendChild(userUsername);
     });
 };
 
