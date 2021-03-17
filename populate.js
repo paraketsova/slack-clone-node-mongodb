@@ -14,7 +14,7 @@ var async = require('async')
 var User = require('./models/user');
 var Channel = require('./models/channel');
 var Message = require('./models/message')
-
+const bcrypt = require('bcrypt');
 
 var mongoose = require('mongoose');
 var mongoDB = userArgs[0];
@@ -28,7 +28,13 @@ var channels = []
 var messages = []
 
 function userCreate(username, firstname, lastname, email, password, cb) {
-    userdetail = { username: username, firstname: firstname, lastname: lastname, email: email, password: password }
+    const userdetail = {
+      username: username, 
+      firstname: firstname, 
+      lastname: lastname, 
+      email: email, 
+      password: bcrypt.hashSync(password, 10)
+    };
 
     var user = new User(userdetail);
 

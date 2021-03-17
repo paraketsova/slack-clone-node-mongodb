@@ -1,4 +1,5 @@
 const UserModel = require('../models/user');
+const bcrypt = require('bcrypt');
 
 const UserRoutes = {};
 
@@ -6,7 +7,7 @@ UserRoutes.signupGet = (req, res) => {
   res.render('signup.ejs', { signupError: req.flash('error') });
 };
 
-UserRoutes.signupPost = (req, res) => {
+UserRoutes.signupPost = async (req, res) => {
   const { username, firstname, lastname, email, password } = req.body;
 
   let errors = [];
@@ -23,6 +24,8 @@ UserRoutes.signupPost = (req, res) => {
     res.render('signup.ejs', { errors, username, firstname, lastname, email, password });
   } else {
     const newUser = new UserModel({ username, firstname, lastname, email, password });
+
+    newUser.password = await bcrypt.hash(password, 10);
 
     newUser.save()
       .then((user) => {
