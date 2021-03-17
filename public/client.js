@@ -8,8 +8,9 @@ const loadUserInfo = () => {
   
 
   fetch('/api/getMe')
-    .then(response => response.json())
+    .then(response => response.ok ? response.json() : null)
     .then(user => {
+      if (!user) return;
       userContainer.innerHTML = `${user.username} <br> ${user.firstname} ${user.lastname} <br> ${user.email}`;
     });
 };
@@ -18,8 +19,10 @@ const loadChannels = () => {
   let channelsContainer = document.getElementById('channels');
 
   fetch('/api/getChannels') 
-    .then(response => response.json())
+    .then(response => response.ok ? response.json() : null)
     .then(channels => {      
+      if (!channels) return;
+
       channelsContainer.innerHTML = '';
 
       channels.forEach(element => {
@@ -44,8 +47,10 @@ const loadChannelMessages = (channelId) => {
   
 
   fetch(`/api/getMessages/${channelId}`)
-    .then(response => response.json())
+    .then(response => response.ok ? response.json() : null)
     .then(messages => {      
+      if (!messages) return;
+
       messagesContainer.innerHTML = '';
 
       messages.forEach(element => {
@@ -61,9 +66,6 @@ const renderMessage = (obj) => {
   const mFrom = document.createElement('li');
   mFrom.innerHTML = obj.user.username;
   m.appendChild(mFrom);
-/*   const mTo = document.createElement('li');
-  mTo.innerHTML = obj.to;
-  m.appendChild(mTo); */
   const mDate = document.createElement('li');
   mDate.innerHTML = obj.timestamp;
   m.appendChild(mDate);
