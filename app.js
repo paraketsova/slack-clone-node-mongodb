@@ -53,4 +53,23 @@ app.get('/api/getUser/:username', ensureAuthenticated, ApiRoutes.getUser);
 app.get('/api/getMessages/:channelId', ensureAuthenticated, ApiRoutes.getMessages);
 
 app.use(express.static(__dirname + '/public'));
-app.listen(3000);
+
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
+io.on('connection', (socket) => {
+  console.log('User connected');
+
+  // Catch message from client
+  socket.on('message', (msg) => {
+    console.log('Got new message: ' + msg);
+    // Send (forward) message to other clients
+    io.emit('message', msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
+http.listen(3000);

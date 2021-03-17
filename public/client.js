@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", function (e) {
   loadUserInfo();
   loadChannels();
+  activateSockets();
 });
 
 const loadUserInfo = () => {
   let userContainer = document.getElementById('userinfo');
-  
 
   fetch('/api/getMe')
     .then(response => response.ok ? response.json() : null)
@@ -44,7 +44,6 @@ const loadChannels = () => {
 
 const loadChannelMessages = (channelId) => {
   let messagesContainer = document.getElementById('messages');
-  
 
   fetch(`/api/getMessages/${channelId}`)
     .then(response => response.ok ? response.json() : null)
@@ -74,4 +73,27 @@ const renderMessage = (obj) => {
   m.appendChild(mText);
 
   return m;
+};
+
+const activateSockets = () => {
+  const socket = io();
+
+  const form = document.getElementById('message-form');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const input = form.getElementsByTagName('input')[0];
+    if (input.value) {
+      // Send message to server
+      socket.emit('message', input.value);
+      input.value = '';
+    }
+  });
+
+  // Catch message from server
+  socket.on('message', function(msg) {
+    const messagesContainer = document.getElementById('messages');
+    messagesContainer.innerHTML = msg;
+    //window.scrollTo(0, document.body.scrollHeight);
+  });
 };
