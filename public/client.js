@@ -1,3 +1,10 @@
+const state = {
+  user: {},
+  channels: [],
+  currentChannel: {},
+  messages: []
+};
+
 document.addEventListener("DOMContentLoaded", function (e) {
   loadUserInfo();
   loadChannels();
@@ -11,52 +18,66 @@ const loadUserInfo = () => {
     .then(response => response.ok ? response.json() : null)
     .then(user => {
       if (!user) return;
+      state.user = user;
       userContainer.innerHTML = `${user.username} <br> ${user.firstname} ${user.lastname} <br> ${user.email}`;
     });
 };
 
 const loadChannels = () => {
-  let channelsContainer = document.getElementById('channels');
-
   fetch('/api/getChannels') 
     .then(response => response.ok ? response.json() : null)
     .then(channels => {      
       if (!channels) return;
-
-      channelsContainer.innerHTML = '';
-
-      channels.forEach(element => {
-        let channelLink = document.createElement('a'); //  skapar label till input för att väljer 5 frågor 
-        channelLink.addEventListener('click', (event) =>  {
-          event.preventDefault();
-          loadChannelMessages(element._id);
-        });
-        channelLink.href = '#'; // TODO: remove after adding CSS
-        channelLink.innerText = element.name;
-
-        let channel = document.createElement('li');
-        channel.appendChild(channelLink);
-
-        channelsContainer.appendChild(channel);
-      })
+      state.channels = channels;
+      renderChannels();
     });
 };
 
 const loadChannelMessages = (channelId) => {
-  let messagesContainer = document.getElementById('messages');
-
   fetch(`/api/getMessages/${channelId}`)
     .then(response => response.ok ? response.json() : null)
     .then(messages => {      
       if (!messages) return;
-
-      messagesContainer.innerHTML = '';
-
-      messages.forEach(element => {
-        let message = renderMessage(element);
-        messagesContainer.appendChild(message);
-      })
+      state.messages = messages;
+      renderMessages();
     });
+};
+
+const renderChannels = () => {
+  const channelsContainer = document.getElementById('channels');
+  channelsContainer.innerHTML = '';
+
+  state.channels.forEach(element => {
+    let channelLink = document.createElement('a'); //  skapar label till input för att väljer 5 frågor 
+    channelLink.addEventListener('click', (event) =>  {
+      event.preventDefault();
+      
+      state.currentChannel = element;
+
+      const form = document.getElementById('message-form');
+      const input = form.getElementsByTagName('input')[0];
+      input.removeAttribute('disabled');
+        
+      loadChannelMessages(element._id);
+    });
+    channelLink.href = '#'; // TODO: remove after adding CSS
+    channelLink.innerText = element.name;
+
+    let channel = document.createElement('li');
+    channel.appendChild(channelLink);
+
+    channelsContainer.appendChild(channel);
+  })
+};
+
+const renderMessages = () => {
+  const messagesContainer = document.getElementById('messages');
+  messagesContainer.innerHTML = '';
+
+  state.messages.forEach(element => {
+    let message = renderMessage(element);
+    messagesContainer.appendChild(message);
+  })
 };
 
 const renderMessage = (obj) => {
@@ -84,16 +105,24 @@ const activateSockets = () => {
     e.preventDefault();
     const input = form.getElementsByTagName('input')[0];
     if (input.value) {
+      const msg = {
+        channel: state.currentChannel._id,
+        user: state.user._id,
+        text: input.value
+      };
       // Send message to server
-      socket.emit('message', input.value);
+      socket.emit('message', msg);
       input.value = '';
     }
   });
 
   // Catch message from server
   socket.on('message', function(msg) {
-    const messagesContainer = document.getElementById('messages');
-    messagesContainer.innerHTML = msg;
-    //window.scrollTo(0, document.body.scrollHeight);
+    if (state.currentChannel._id === msg.channel) {
+      state.messages.push(msg);
+      console.log(msg);
+      renderMessages();
+      //window.scrollTo(0, document.body.scrollHeight);
+    }
   });
 };

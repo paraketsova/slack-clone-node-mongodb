@@ -61,10 +61,18 @@ io.on('connection', (socket) => {
   console.log('User connected');
 
   // Catch message from client
-  socket.on('message', (msg) => {
-    console.log('Got new message: ' + msg);
+  socket.on('message', async (data) => {
+    console.log('Got new message: ' + JSON.stringify(data));
+
+    // Save message to DB
+    data.timestamp = new Date();
+    const MessageModel = require('./models/message');
+    const message = new MessageModel(data);
+    const populatedMessage = await message.save()
+      .then((m) => m.populate('user').execPopulate());
+    
     // Send (forward) message to other clients
-    io.emit('message', msg);
+    io.emit('message', populatedMessage);
   });
 
   socket.on('disconnect', () => {
