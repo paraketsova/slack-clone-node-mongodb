@@ -8,7 +8,7 @@ PageRoutes.root = (req, res) => {
   if (req.isAuthenticated()) {
     res.sendFile(path.join(__dirname + '/../public/index.html'));
   } else {
-    res.sendFile(path.join(__dirname + '/../public/index-unauthenticated.html'));
+    res.sendFile(path.join(__dirname + '/../public/welcome.html'));
   }
 };
 
