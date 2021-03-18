@@ -44,10 +44,10 @@
         </div>
         <div class="row align-items-center mt-4">
           <div class="col">
-            <input type="password" class="form-control" placeholder="Password">
+            <input type="password" name="password" class="form-control" placeholder="Password" value="<%= typeof password != 'undefined' ? password : '' %>">
           </div>
           <div class="col">
-            <input type="password" class="form-control" placeholder="Confirm Password" name="password" value="<%= typeof password != 'undefined' ? password : '' %>">
+            <input type="password" name="password2" class="form-control" placeholder="Confirm password" value="<%= typeof password2 != 'undefined' ? password2 : '' %>">
           </div>
         </div>
         <div class="row align-items-center mt-4">

@@ -8,7 +8,7 @@ UserRoutes.signupGet = (req, res) => {
 };
 
 UserRoutes.signupPost = async (req, res) => {
-  const { username, firstname, lastname, email, password } = req.body;
+  const { username, firstname, lastname, email, password, password2 } = req.body;
 
   let errors = [];
 
@@ -20,8 +20,12 @@ UserRoutes.signupPost = async (req, res) => {
     errors.push("Use at least 6 characters for your password");
   }
 
+  if (password !== password2) {
+    errors.push("Passwords don't match");
+  }
+
   if (errors.length > 0) {
-    res.render('signup.ejs', { errors, username, firstname, lastname, email, password });
+    res.render('signup.ejs', { errors, username, firstname, lastname, email, password, password2 });
   } else {
     const newUser = new UserModel({ username, firstname, lastname, email, password });
 
