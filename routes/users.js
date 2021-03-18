@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const UserRoutes = {};
 
 UserRoutes.signupGet = (req, res) => {
-  res.render('signup.ejs', { signupError: req.flash('error') });
+  res.render('signup.ejs');
 };
 
 UserRoutes.signupPost = async (req, res) => {
@@ -40,7 +40,7 @@ UserRoutes.signupPost = async (req, res) => {
 };
 
 UserRoutes.loginGet = (req, res) => {
-  res.render('login.ejs', { loginError: req.flash('error') });
+  res.render('login.ejs', { errors: req.flash('error') });
 };
 
 UserRoutes.loginPost = (passport) => passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true });
