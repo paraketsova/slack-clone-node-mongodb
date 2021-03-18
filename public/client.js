@@ -30,6 +30,13 @@ const loadChannels = () => {
       if (!channels) return;
       state.channels = channels;
       renderChannels();
+    })
+    .then(channels => {
+      // Loading the first channel automatically
+      const channel = state.channels[0];
+      const id = channel._id;
+      selectCurrentChannel(channel);
+      loadChannelMessages(id);
     });
 };
 
@@ -51,23 +58,30 @@ const renderChannels = () => {
     let channelLink = document.createElement('a'); //  skapar label till input för att väljer 5 frågor 
     channelLink.addEventListener('click', (event) =>  {
       event.preventDefault();
-      
-      state.currentChannel = element;
-
-      const form = document.getElementById('message-form');
-      const input = form.getElementsByTagName('input')[0];
-      input.removeAttribute('disabled');
-        
+      selectCurrentChannel(element);
       loadChannelMessages(element._id);
     });
     channelLink.href = '#'; // TODO: remove after adding CSS
     channelLink.innerText = element.name;
 
     let channel = document.createElement('li');
+    channel.id = `channel-${element._id}`;
     channel.appendChild(channelLink);
 
     channelsContainer.appendChild(channel);
   })
+};
+
+const selectCurrentChannel = (channel) => {
+  state.currentChannel = channel;
+
+  const previousChannelElement = document.getElementsByClassName('channel-selected')[0];
+  if (previousChannelElement) {
+    previousChannelElement.classList.remove('channel-selected');
+  }
+
+  const currentChannelElement = document.getElementById(`channel-${channel._id}`);
+  currentChannelElement.classList.add('channel-selected');
 };
 
 const renderMessages = () => {
@@ -78,6 +92,8 @@ const renderMessages = () => {
     let message = renderMessage(element);
     messagesContainer.appendChild(message);
   })
+
+  messagesContainer.scrollIntoView(false);
 };
 
 const renderMessage = (obj) => {
@@ -120,9 +136,7 @@ const activateSockets = () => {
   socket.on('message', function(msg) {
     if (state.currentChannel._id === msg.channel) {
       state.messages.push(msg);
-      console.log(msg);
       renderMessages();
-      //window.scrollTo(0, document.body.scrollHeight);
     }
   });
 };

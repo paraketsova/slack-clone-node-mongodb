@@ -51,3 +51,7 @@ a {
   color: #fff;
   background-color: #D36135;
 }
+
+.channel-selected {
+  background-color: #863c1f;
+}
