@@ -1,0 +1,53 @@
+body {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 1fr 3fr 10fr 1fr;
+  gap: 0;
+  grid-template-areas:
+    "header channelInfo"
+    "userInfo messages"
+    "channels messages"
+    "channels input";
+}
+section.header {
+  grid-area: header;
+  background-color: #D36135;
+  color: #fff;
+}
+section.channelInfo {
+  grid-area: channelInfo;
+  background-color: #EFECCA;
+}
+section.userInfo {
+  grid-area: userInfo;
+  background-color: #D36135;
+  color: #fff;
+}
+section.channels {
+  grid-area: channels;
+  background-color: #D36135;
+  color: #fff;
+  overflow-y: auto;
+}
+section.messages {
+  grid-area: messages;
+  overflow-y: auto;
+  background-color: #EFECCA;
+}
+section.input {
+  grid-area: input;
+}
+
+a {
+  color: #fff;
+}
+
+.button-plane {
+  color: #fff;
+  background-color: #D36135;
+}
