@@ -66,6 +66,7 @@ const renderChannels = () => {
 
     let channel = document.createElement('li');
     channel.id = `channel-${element._id}`;
+    channel.classList.add('channel');
     channel.appendChild(channelLink);
 
     channelsContainer.appendChild(channel);

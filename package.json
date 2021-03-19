@@ -1,7 +1,7 @@
 {
   "name": "slack-clone-node-mongodb",
   "version": "1.0.0",
-  "description": "The learning project: Node.js, MongoDB, express, ejs, passport",
+  "description": "The learning project: Node.js, MongoDB, express, ejs, passport, socket.io",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,6 +23,7 @@
     "connect-flash": "^0.1.1",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "express-ejs-layouts": "^2.5.0",
     "express-session": "^1.17.1",
     "express-static": "^1.2.6",
     "mongoose": "^5.11.19",

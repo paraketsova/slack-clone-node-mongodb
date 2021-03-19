@@ -31,6 +31,11 @@ const ApiRoutes = require('./routes/api');
 
 const app = express();
 
+
+const expressEjsLayout = require('express-ejs-layouts')
+app.set('view engine', 'ejs')
+app.use(expressEjsLayout)
+
 app.use(session({ secret: 'ponies' }));
 app.use(flash());
 app.use(express.json()); // support json encoded bodies
@@ -53,6 +58,8 @@ app.get('/api/getUser/:username', ensureAuthenticated, ApiRoutes.getUser);
 app.get('/api/getMessages/:channelId', ensureAuthenticated, ApiRoutes.getMessages);
 
 app.use(express.static(__dirname + '/public'));
+
+//==== Socket ====//
 
 const http = require('http').Server(app);
 const io = require('socket.io')(http);

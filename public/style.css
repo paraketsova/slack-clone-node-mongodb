@@ -21,7 +21,7 @@ section.header {
 }
 section.channelInfo {
   grid-area: channelInfo;
-  background-color: #EFECCA;
+  background-color: #eabeab;
 }
 section.userInfo {
   grid-area: userInfo;
@@ -37,10 +37,15 @@ section.channels {
 section.messages {
   grid-area: messages;
   overflow-y: auto;
-  background-color: #EFECCA;
+  background-color: #ebe1de;
 }
 section.input {
   grid-area: input;
+}
+
+.elephant {
+  display: inline-block;
+  transform: scaleX(-1);
 }
 
 a {
@@ -52,6 +57,29 @@ a {
   background-color: #D36135;
 }
 
+.channel {
+  list-style: none;
+}
+.channel:hover {
+  background-color: #bd552d;
+}
 .channel-selected {
-  background-color: #863c1f;
+  background-color: #863c1f !important;
+}
+.channel a {
+  display: block;
+  padding: .25rem .5rem;
+  text-decoration: none;
+}
+.channel a:hover {
+  color: #fff;
+}
+
+.logo {
+  color: #363135;
+}
+
+.slogan {
+  color: #881c19;
+  font-size: small;
 }
