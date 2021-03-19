@@ -39,7 +39,10 @@ UserRoutes.signupPost = async (req, res) => {
           return res.redirect('/');
         });
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        errors.push(`Database error: ${error.message}`);
+        res.render('signup.ejs', { errors, username, firstname, lastname, email, password, password2 });
+      });
   }
 };
 
