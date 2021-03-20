@@ -76,7 +76,7 @@ const renderChannels = () => {
 const selectCurrentChannel = (channel) => {
   state.currentChannel = channel;
 
-  const previousChannelElement = document.getElementsByClassName('channel-selected')[0];
+  const previousChannelElement = document.getElementsByClassName('channel-selected')[0]; // begin with channel 1
   if (previousChannelElement) {
     previousChannelElement.classList.remove('channel-selected');
   }
@@ -94,11 +94,11 @@ const renderMessages = () => {
     messagesContainer.appendChild(message);
   })
 
-  messagesContainer.scrollIntoView(false);
+  messagesContainer.scrollIntoView(false); // scroll messages to the bottom
 };
 
 const renderMessage = (obj) => {
-  const m =  document.createElement('ul');
+  const m = document.createElement('ul');
 
   const mFrom = document.createElement('li');
   mFrom.innerHTML = obj.user.username;
@@ -109,6 +109,18 @@ const renderMessage = (obj) => {
   const mText = document.createElement('li');
   mText.innerHTML = obj.text;
   m.appendChild(mText);
+  
+  const attachments = obj.attachments;
+
+  attachments.forEach(element => {
+    console.log(element.filename);
+    let mAttachment = document.createElement('img');
+    mAttachment.src = `/attachments/${ element._id }/${ element.filename }`;
+    m.appendChild(mAttachment);
+  });
+
+  const hr = document.createElement('hr');
+  m.appendChild(hr);
 
   return m;
 };

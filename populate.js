@@ -13,7 +13,8 @@ if (!userArgs[0].startsWith('mongodb')) {
 var async = require('async')
 var User = require('./models/user');
 var Channel = require('./models/channel');
-var Message = require('./models/message')
+var Message = require('./models/message');
+var Attachment = require('./models/attachment');
 const bcrypt = require('bcrypt');
 
 var mongoose = require('mongoose');
@@ -26,6 +27,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 var users = []
 var channels = []
 var messages = []
+var attachments = []
 
 function userCreate(username, firstname, lastname, email, password, cb) {
     const userdetail = {
@@ -63,12 +65,34 @@ function channelCreate(name, cb) {
     });
 }
 
-function messageCreate(user, channel, timestamp, text, cb) {
+function attachmentCreate(filename, mimetype, height, width, cb) {
+  const attachmentDetail = {
+    filename: filename,
+    mimetype: mimetype,
+    height: height,
+    width: width
+  };
+
+  const attachment = new Attachment(attachmentDetail);
+
+  attachment.save(function (err) {
+    if (err) {
+        cb(err, null);
+        return;
+    }
+    console.log('New Attachment: ' + attachment);
+    attachments.push(attachment)
+    cb(null, attachment);
+  });
+}
+
+function messageCreate(user, channel, timestamp, text, attachments, cb) {
     messagedetail = {
         user: user,
         channel: channel,
         timestamp: timestamp,
         text: text,
+        attachments: attachments
     }
     if (user != false) messagedetail.user = user
     if (channel != false) messagedetail.channel = channel
@@ -86,7 +110,7 @@ function messageCreate(user, channel, timestamp, text, cb) {
 }
 
 
-function createUsersChannels(cb) {
+function createUsersChannelsAttachments(cb) {
   async.series([
     function (callback) {
       userCreate('AnnaB', 'Anna', 'Bothfuss', 'anna_b@gmail.com', 'A01', callback);
@@ -116,57 +140,68 @@ function createUsersChannels(cb) {
       userCreate('ElenaA','Elena', 'Aconit', 'elena_a@gmail.com', 'Enna01', callback);
     },
     function (callback) {
-      channelCreate('channel_1', callback);
+      channelCreate('Warm', callback);
     },
     function (callback) {
-      channelCreate('channel_2', callback);
+      channelCreate('Warmer', callback);
     },
     function (callback) {
-      channelCreate('channel_3', callback);
+      channelCreate('Warmest', callback);
     },
+    function (callback) {
+      attachmentCreate("joke1.png", "image/png", 914, 344, callback);
+    },
+    function (callback) {
+      attachmentCreate("cows_1.jpg", "image/jpeg", 858, 584, callback);
+    },
+    function (callback) {
+      attachmentCreate("cows_2.png", "image/png", 846, 712, callback);
+    }, 
+    function (callback) {
+      attachmentCreate("cows_3.jpg", "image/jpeg", 544, 356, callback);
+    }
   ],
   // optional callback
   cb);
 }
 
-
 function createMessages(cb) {
   async.parallel([
     function (callback) {
-      messageCreate(users[0], channels[0], "2021-03-02 13:14:51", "My dog used to chase people on a bike a lot. It got so bad I had to take his bike away", callback);
+      messageCreate(users[0], channels[0], "2021-03-02 13:14:51", "My dog used to chase people on a bike a lot. It got so bad I had to take his bike away", [attachments[0]], callback);
     },
     function (callback) {
-      messageCreate(users[1], channels[1], "2021-03-02 13:14:52", "What kind of magic do cows believe in? MOODOO.", callback);
+      messageCreate(users[1], channels[1], "2021-03-02 13:14:52", "What kind of magic do cows believe in? MOODOO.",  [attachments[1], attachments[2], attachments[3]], callback);
     },
     function (callback) {
-      messageCreate(users[2], channels[2], "2021-03-02 13:14:55", "What do you call someone with no nose? Nobody knows.", callback);
+      messageCreate(users[2], channels[2], "2021-03-02 13:14:55", "What do you call someone with no nose? Nobody knows.", [], callback);
     },
     function (callback) {
-      messageCreate(users[3], channels[0], "2021-03-03 14:14:51", "Did you hear the one about the guy with the broken hearing aid? Neither did he.", callback);
+      messageCreate(users[3], channels[0], "2021-03-03 14:14:51", "Did you hear the one about the guy with the broken hearing aid? Neither did he.", [], callback);
     },
     function (callback) {
-      messageCreate(users[4], channels[1], "2021-03-03 14:14:52", "What do you call a fly without wings? A walk.", callback);
+      messageCreate(users[4], channels[1], "2021-03-03 14:14:52", "What do you call a fly without wings? A walk.", [], callback);
     },
     function (callback) {
-      messageCreate(users[5], channels[2], "2021-03-03 14:14:55", "How many optometrists does it take to change a light bulb? 1 or 2? 1... or 2? do you call someone with no nose? Nobody knows.", callback);
+      messageCreate(users[5], channels[2], "2021-03-03 14:14:55", "How many optometrists does it take to change a light bulb? 1 or 2? 1... or 2? do you call someone with no nose? Nobody knows.", [], callback);
     },
     function (callback) {
-      messageCreate(users[7], channels[0], "2021-03-04 14:14:51", "I used to work for a soft drink can crusher. It was soda pressing.", callback);
+      messageCreate(users[7], channels[0], "2021-03-04 14:14:51", "I used to work for a soft drink can crusher. It was soda pressing.", [], callback);
     },
     function (callback) {
-      messageCreate(users[8], channels[1], "2021-03-04 14:14:52", "I went to the zoo the other day, there was only one dog in it. It was a shitzu.", callback);
+      messageCreate(users[8], channels[1], "2021-03-04 14:14:52", "I went to the zoo the other day, there was only one dog in it. It was a shitzu.", [], callback);
     },
     function (callback) {
-      messageCreate(users[0], channels[2], "2021-03-04 14:14:55", "Why are skeletons so calm? Because nothing gets under their skin.", callback);
+      messageCreate(users[0], channels[2], "2021-03-04 14:14:55", "Why are skeletons so calm? Because nothing gets under their skin.", [], callback);
     },
     function (callback) {
-      messageCreate(users[1], channels[0], "2021-03-05 14:14:51", "What did celery say when he broke up with his girlfriend? She wasn't right for me, so I really don't carrot all.", callback);
+      messageCreate(users[1], channels[0], "2021-03-05 14:14:51", "What did celery say when he broke up with his girlfriend? She wasn't right for me, so I really don't carrot all.", [], callback);
     },
     function (callback) {
-      messageCreate(users[2], channels[1], "2021-03-05 14:14:52", "I gave all my dead batteries away today, free of charge.", callback);
+      messageCreate(users[2], channels[1], "2021-03-05 14:14:52", "I gave all my dead batteries away today, free of charge.", [], callback);
     },
     function (callback) {
-      messageCreate(users[3], channels[2], "2021-03-05 14:14:55", "Do you know where you can get chicken broth in bulk? The stock market.", callback);
+      messageCreate(users[3], channels[2], "2021-03-05 14:14:55", "Do you know where you can get chicken broth in bulk? The stock market.", [], callback);
     },
       
   ],
@@ -175,10 +210,8 @@ function createMessages(cb) {
 }
 
 
-
-
 async.series([
-    createUsersChannels,
+    createUsersChannelsAttachments,
     createMessages
 ],
     // Optional callback

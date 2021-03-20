@@ -44,7 +44,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/', PageRoutes.root);
-app.get('/mdb', PageRoutes.mdb);
+app.get('/mdb', PageRoutes.mdb); // TODO: DELETE mdb page!
 
 app.get('/signup', UserRoutes.signupGet);
 app.post('/signup', UserRoutes.signupPost);

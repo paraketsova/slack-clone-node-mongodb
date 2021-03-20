@@ -1,5 +1,6 @@
 const ChannelModel = require('../models/channel');
 const MessageModel = require('../models/message');
+const AttachmentModel = require('../models/attachment');
 
 const ApiRoutes = {};
 
@@ -24,7 +25,7 @@ ApiRoutes.getMessages = async (req, res) => {
   const channelId = req.params.channelId; 
 
   const messages = await MessageModel.find({ channel: { _id: channelId } })
-    .populate(['user'])
+    .populate(['user', 'attachments'])
     .exec();
   res.json(messages);
 };

@@ -23,7 +23,11 @@ const MessageSchema = new Schema({
     type: String,
     required: true,
     maxlength: 1000
-  }
+  },
+  attachments: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Attachment'
+  }]
 });
 
 MessageSchema
