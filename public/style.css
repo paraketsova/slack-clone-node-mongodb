@@ -105,3 +105,12 @@ hr:after {
   position: relative;
   top: -13px;
 }
+
+input[type="file"] {
+  display: none;
+}
+
+.button-paperclip {
+  color: #fff;
+  background-color: #eabeab;
+}

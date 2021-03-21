@@ -131,8 +131,8 @@ const activateSockets = () => {
 
   form.addEventListener('submit', function(e) {
     e.preventDefault();
-    const filesInput = form.getElementsByTagName('input')[0];
-    const textInput = form.getElementsByTagName('input')[1];
+    const textInput = form.getElementsByTagName('input')[0];
+    const filesInput = form.getElementsByTagName('input')[1];
 
     if (textInput.value) {
       // Here, `filesInput.files` is FileList - an Array-like object, but not Array. Let's make it a real Array:

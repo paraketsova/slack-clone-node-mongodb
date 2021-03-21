@@ -37,15 +37,22 @@
 
   <section class="input p-2">
     <form id="message-form" enctype="multipart/form-data">
-      <div class="row g-3">
-        <div class="col-1">
-          <input type="file" accept="image/png, image/jpeg" class="form-control" multiple></input>
-        </div>
+      <div class="row g-2">
         <div class="col-10">
           <input type="text" class="form-control" autocomplete="off"/>
         </div>
-        <div class="col-1">
-          <button type="submit" class="form-control button-plane">✈</button>
+        <div class="col-2">
+          <div class="row g-2">
+            <div class="col-4">
+              <label class="btn form-control button-paperclip" title="Add images">
+                <input type="file" accept="image/png, image/jpeg" class="form-control" multiple/>
+                📎
+              </label>
+            </div>
+            <div class="col-8">
+              <button type="submit" class="form-control button-plane">✈</button>
+            </div>
+          </div>
         </div>
       </div>
     </form>
