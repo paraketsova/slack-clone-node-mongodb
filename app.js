@@ -3,6 +3,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const path = require('path');
 const async = require('async');
+const fs = require('fs');
 
 
 //==== DB ===//
@@ -11,7 +12,7 @@ const mongoose = require('mongoose');
 const connection = mongoose.connect('mongodb://localhost:27017/slackClone', {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}) 
+})
   .then(() => console.log('connected...'))
   .catch(err => console.log(err));
 
@@ -69,15 +70,42 @@ io.on('connection', (socket) => {
 
   // Catch message from client
   socket.on('message', async (data) => {
-    console.log('Got new message: ' + JSON.stringify(data));
+    console.log('Got new message');
+
+    const attachmentIds = [];
+
+    // Catch and save attachments:
+    if (data.files.length > 0) {
+      const AttachmentModel = require('./models/attachment');
+
+      for (const file of data.files) {
+        const attachment = new AttachmentModel(file);
+
+        // Save attachment to DB and get MongoDB Attachment object in return
+        const dbAttachment = await attachment.save();
+
+        // Get ID of the newly created attachment, to use in filepath
+        const attachmentId = dbAttachment.id;
+        attachmentIds.push(attachmentId);
+
+        fs.mkdirSync(`public/attachments/${attachmentId}`);
+        fs.writeFile(`public/attachments/${attachmentId}/${file.name}`, file.blob, function (err) {
+          if (err) return console.log(err);
+          console.log('Attachment uploaded');
+        });
+      }
+    }
 
     // Save message to DB
-    data.timestamp = new Date();
+    delete data.files; // removing, because this property is not needed for MessageModel
+    data.attachments = attachmentIds; // adding IDs of attachments we created above
+
     const MessageModel = require('./models/message');
     const message = new MessageModel(data);
+
     const populatedMessage = await message.save()
-      .then((m) => m.populate('user').execPopulate());
-    
+      .then((m) => m.populate(['user', 'attachments']).execPopulate());
+
     // Send (forward) message to other clients
     io.emit('message', populatedMessage);
   });

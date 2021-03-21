@@ -3,20 +3,16 @@ const Schema = mongoose.Schema;
 
 
 const AttachmentSchema = new Schema({
-  filename: {
-    type: String,
+  name: {
+    type: String, // Example: "superman-comics.jpg"
     required: true
   },
-  mimetype: {
-    type: String,
+  type: {
+    type: String, // Example: "image/jpeg"
     required: true
   },
-  height: {
-    type: Number,
-    required: true
-  },
-  width: {
-    type: Number,
+  size: {
+    type: Number, // Example (number of bytes): 302011
     required: true
   }
 });

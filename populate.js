@@ -31,10 +31,10 @@ var attachments = []
 
 function userCreate(username, firstname, lastname, email, password, cb) {
     const userdetail = {
-      username: username, 
-      firstname: firstname, 
-      lastname: lastname, 
-      email: email, 
+      username: username,
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
       password: bcrypt.hashSync(password, 10)
     };
 
@@ -65,12 +65,11 @@ function channelCreate(name, cb) {
     });
 }
 
-function attachmentCreate(filename, mimetype, height, width, cb) {
+function attachmentCreate(name, type, size, cb) {
   const attachmentDetail = {
-    filename: filename,
-    mimetype: mimetype,
-    height: height,
-    width: width
+    name: name,
+    type: type,
+    size: size
   };
 
   const attachment = new Attachment(attachmentDetail);
@@ -149,16 +148,16 @@ function createUsersChannelsAttachments(cb) {
       channelCreate('Warmest', callback);
     },
     function (callback) {
-      attachmentCreate("joke1.png", "image/png", 914, 344, callback);
+      attachmentCreate("joke1.png", "image/png", 914344, callback);
     },
     function (callback) {
-      attachmentCreate("cows_1.jpg", "image/jpeg", 858, 584, callback);
+      attachmentCreate("cows_1.jpg", "image/jpeg", 858584, callback);
     },
     function (callback) {
-      attachmentCreate("cows_2.png", "image/png", 846, 712, callback);
-    }, 
+      attachmentCreate("cows_2.png", "image/png", 846712, callback);
+    },
     function (callback) {
-      attachmentCreate("cows_3.jpg", "image/jpeg", 544, 356, callback);
+      attachmentCreate("cows_3.jpg", "image/jpeg", 544356, callback);
     }
   ],
   // optional callback
@@ -203,7 +202,7 @@ function createMessages(cb) {
     function (callback) {
       messageCreate(users[3], channels[2], "2021-03-05 14:14:55", "Do you know where you can get chicken broth in bulk? The stock market.", [], callback);
     },
-      
+
   ],
   // optional callback
   cb);

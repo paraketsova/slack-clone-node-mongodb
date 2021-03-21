@@ -12,7 +12,7 @@ PageRoutes.root = (req, res) => {
   }
 };
 
-PageRoutes.mdb = (req, res) => {
+PageRoutes.mdb = (req, res) => { //TODO - delete if delete mdb page
   ChannelModel
   .find()
   .exec((error, channels) => {
