@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", function (e) {
   activateSockets();
 });
 
+
+//=== ===//
+
 const loadUserInfo = () => {
   let userContainer = document.getElementById('userinfo');
 
@@ -22,6 +25,8 @@ const loadUserInfo = () => {
       userContainer.innerHTML = `${user.username} <br> ${user.firstname} ${user.lastname} <br> ${user.email}`;
     });
 };
+
+//=== ===//
 
 const loadChannels = () => {
   fetch('/api/getChannels')
@@ -55,7 +60,7 @@ const renderChannels = () => {
   channelsContainer.innerHTML = '';
 
   state.channels.forEach(element => {
-    let channelLink = document.createElement('a'); //  skapar label till input för att väljer 5 frågor
+    let channelLink = document.createElement('a');
     channelLink.addEventListener('click', (event) =>  {
       event.preventDefault();
       selectCurrentChannel(element);
@@ -70,6 +75,8 @@ const renderChannels = () => {
     channel.appendChild(channelLink);
 
     channelsContainer.appendChild(channel);
+
+
   })
 };
 
@@ -83,6 +90,15 @@ const selectCurrentChannel = (channel) => {
 
   const currentChannelElement = document.getElementById(`channel-${channel._id}`);
   currentChannelElement.classList.add('channel-selected');
+
+  const channelInfo = document.getElementById('channelInfo'); // add channel's name to the top of the page
+  channelInfo.innerHTML = '';
+  channelInfo.innerHTML = `${channel.name} `;
+  let channelInfoText = document.createElement('div');
+  channelInfoText.id = 'channelInfoText'
+  channelInfoText.innerHTML = `  channel's messages:`;
+  channelInfo.appendChild(channelInfoText);
+
 };
 
 const renderMessages = () => {
@@ -98,15 +114,18 @@ const renderMessages = () => {
 };
 
 const renderMessage = (obj) => {
-  const m = document.createElement('ul');
+  const m = document.createElement('div');
 
-  const mFrom = document.createElement('li');
+  const mFrom = document.createElement('div');
+  mFrom.id = 'mUsername';
   mFrom.innerHTML = obj.user.username;
   m.appendChild(mFrom);
-  const mDate = document.createElement('li');
+  const mDate = document.createElement('div');
+  mDate.id = 'mDate';
   mDate.innerHTML = obj.timestamp;
   m.appendChild(mDate);
-  const mText = document.createElement('li');
+  const mText = document.createElement('div');
+  mText.id = 'mText';
   mText.innerHTML = obj.text;
   m.appendChild(mText);
 
@@ -123,6 +142,7 @@ const renderMessage = (obj) => {
 
   return m;
 };
+//---//
 
 const activateSockets = () => {
   const socket = io();

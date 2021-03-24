@@ -22,6 +22,7 @@ section.header {
 section.channelInfo {
   grid-area: channelInfo;
   background-color: #eabeab;
+  box-shadow: 0px -8px 5px -5px #ebe1de inset;
 }
 section.userInfo {
   grid-area: userInfo;
@@ -113,4 +114,31 @@ input[type="file"] {
 .button-paperclip {
   color: #fff;
   background-color: #eabeab;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#mUsername {
+  font-weight:bold;
+  font-size: 0.9em;
+}
+
+#mDate {
+  font-size: 0.5em;
+}
+
+#mText {
+  font-size: 0.8em;
+}
+
+#channelInfo {
+  font-weight:bold;
+  font-size: 1.3em;
+  color: #863c1f;
+  display: inline-block;
+}
+
+#channelInfoText {
+  font-size: small;
+  color: #363135;
 }
