@@ -12,12 +12,13 @@ PageRoutes.root = (req, res) => {
   }
 };
 
+//--- mdb ---//
 PageRoutes.mdb = (req, res) => { //TODO - delete if delete mdb page
   ChannelModel
   .find()
   .exec((error, channels) => {
     if (error) {
-      return handleError(error);                        
+      return handleError(error);
     }
     MessageModel
     .find()
@@ -32,5 +33,7 @@ PageRoutes.mdb = (req, res) => { //TODO - delete if delete mdb page
     })
   })
 };
+
+//==== ====//
 
 module.exports = PageRoutes;

@@ -1,14 +1,13 @@
 const express = require('express');
-const flash = require('connect-flash');
-const session = require('express-session');
-const path = require('path');
-const async = require('async');
-const fs = require('fs');
-
+const flash = require('connect-flash'); // display flash messages
+const session = require('express-session'); // building a user-session
+const path = require('path'); // access and interact with the file system (path methods)
+const async = require('async'); // a utility module which provides straight-forward, powerful functions for working with asynchronous JavaScript
+const fs = require('fs'); // access and interact with the file system - write file and build directory on Diskstorage
 
 //==== DB ===//
 
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); // storing and reading data from DB
 const connection = mongoose.connect('mongodb://localhost:27017/slackClone', {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -25,15 +24,15 @@ db.on('error', error => {
 
 //==== App ====//
 
-const { passport, ensureAuthenticated } = require('./passport');
+const { passport, ensureAuthenticated } = require('./passport'); //to handle user's authentication
 const PageRoutes = require('./routes/pages');
 const UserRoutes = require('./routes/users');
 const ApiRoutes = require('./routes/api');
 
-const app = express();
+const app = express(); //skapa obj av express module
 
 
-const expressEjsLayout = require('express-ejs-layouts')
+const expressEjsLayout = require('express-ejs-layouts'); // layout support for ejs in express
 app.set('view engine', 'ejs')
 app.use(expressEjsLayout)
 
@@ -63,7 +62,7 @@ app.use(express.static(__dirname + '/public'));
 //==== Socket ====//
 
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const io = require('socket.io')(http); // use socket.io library for build real-time communication
 
 io.on('connection', (socket) => {
   console.log('User connected');

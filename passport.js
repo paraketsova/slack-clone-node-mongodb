@@ -1,11 +1,11 @@
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport'); //to handle user's authentication
+const LocalStrategy = require('passport-local').Strategy; //auth.mechanism with username and password
 const UserModel = require('./models/user');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt'); //for encrypting pass. before you store in MongoDB
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    // TODO: add support for logging in with email    
+    // TODO: add support for logging in with email
     UserModel.findOne({ username: username }, async function(error, user) {
       if (error) {
         return done(error);
