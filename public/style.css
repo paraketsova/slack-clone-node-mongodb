@@ -142,3 +142,22 @@ input[type="file"] {
   font-size: small;
   color: #363135;
 }
+
+#addChannel {
+  padding-top: 1.5rem;
+}
+
+#addChannel div {
+  display: block;
+  padding: .5rem 0rem;
+  text-decoration: none;
+}
+
+#btnSaveChannel {
+  visibility: hidden;
+}
+
+.channels ::placeholder {
+  font-size: small;
+  font-style: italic;
+}

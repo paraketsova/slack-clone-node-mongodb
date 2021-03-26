@@ -73,12 +73,27 @@ const renderChannels = () => {
     channel.id = `channel-${element._id}`;
     channel.classList.add('channel');
     channel.appendChild(channelLink);
-
     channelsContainer.appendChild(channel);
+  })
 
+  // Add new channel
+  let wrappNameNewChannel = document.getElementById("wrappNameNewChannel")
+  let btnAddChannel = document.getElementById('btnAddChannel');
+  let btnSaveChannel =document.getElementById('btnSaveChannel');
 
+  btnAddChannel.addEventListener('click', (event) =>  {
+    btnAddChannel.style.visibility = "hidden";
+    let nameNewChannel = document.createElement('input');
+    nameNewChannel.type = 'text';
+    nameNewChannel.placeholder = `Add channel's name`;
+    nameNewChannel.id = 'nameNewChannel';
+    wrappNameNewChannel.appendChild(nameNewChannel);
+    btnSaveChannel.style.visibility = "visible";
+    addNewChannel();
   })
 };
+
+const addNewChannel = () => {} //TODO: add new channels name to channels container; add functional to choose new channel
 
 const selectCurrentChannel = (channel) => {
   state.currentChannel = channel;
@@ -98,7 +113,6 @@ const selectCurrentChannel = (channel) => {
   channelInfoText.id = 'channelInfoText'
   channelInfoText.innerHTML = `  channel's messages:`;
   channelInfo.appendChild(channelInfoText);
-
 };
 
 const renderMessages = () => {
