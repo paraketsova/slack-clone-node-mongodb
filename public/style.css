@@ -118,6 +118,11 @@ input[type="file"] {
   padding-right: 0;
 }
 
+#messages {
+  color: #863c1f;
+  font-size: small;
+}
+
 #mUsername {
   font-weight:bold;
   font-size: 0.9em;

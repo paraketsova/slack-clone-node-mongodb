@@ -57,6 +57,8 @@ app.get('/api/getMe', ensureAuthenticated, ApiRoutes.getMe);
 app.get('/api/getUser/:username', ensureAuthenticated, ApiRoutes.getUser);
 app.get('/api/getMessages/:channelId', ensureAuthenticated, ApiRoutes.getMessages);
 
+app.post('/api/addChannel', ensureAuthenticated, ApiRoutes.addChannel);
+
 app.use(express.static(__dirname + '/public'));
 
 //==== Socket ====//

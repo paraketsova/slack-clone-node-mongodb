@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
 });
 
 
-//=== ===//
+//=== Load user's info ===//
 
 const loadUserInfo = () => {
   let userContainer = document.getElementById('userinfo');
@@ -26,7 +26,7 @@ const loadUserInfo = () => {
     });
 };
 
-//=== ===//
+//=== Load  channels's container ===//
 
 const loadChannels = () => {
   fetch('/api/getChannels')
@@ -76,12 +76,19 @@ const renderChannels = () => {
     channelsContainer.appendChild(channel);
   })
 
-  // Add new channel
-  let wrappNameNewChannel = document.getElementById("wrappNameNewChannel")
-  let btnAddChannel = document.getElementById('btnAddChannel');
-  let btnSaveChannel =document.getElementById('btnSaveChannel');
+  //=== Add new channel ===//
+  addNewChannel();
+};
+
+const addNewChannel = () => {
 
   btnAddChannel.addEventListener('click', (event) =>  {
+    let wrappNameNewChannel = document.getElementById("wrappNameNewChannel")
+    wrappNameNewChannel.innerHTML = '';
+    let btnAddChannel = document.getElementById('btnAddChannel');
+    let btnSaveChannel =document.getElementById('btnSaveChannel');
+
+    event.preventDefault();
     btnAddChannel.style.visibility = "hidden";
     let nameNewChannel = document.createElement('input');
     nameNewChannel.type = 'text';
@@ -89,11 +96,33 @@ const renderChannels = () => {
     nameNewChannel.id = 'nameNewChannel';
     wrappNameNewChannel.appendChild(nameNewChannel);
     btnSaveChannel.style.visibility = "visible";
-    addNewChannel();
+    //addNewChannel();
   })
-};
+  btnSaveChannel.addEventListener('click', (event) => {
+    event.preventDefault();
 
-const addNewChannel = () => {} //TODO: add new channels name to channels container; add functional to choose new channel
+    document.getElementById('nameNewChannel')
+    let nameText = nameNewChannel.value;
+    console.log(nameText);
+
+    fetch('/api/addChannel', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name: nameText }),
+    })
+    .then(response => response.ok ? response.json() : null)
+    .then(channel => {
+      if (!channel) return;
+      console.log(channel);
+    });
+    btnAddChannel.style.visibility = "visible";
+    wrappNameNewChannel.innerHTML = '';
+    btnSaveChannel.style.visibility = "hidden";
+    loadChannels()
+  })
+}
 
 const selectCurrentChannel = (channel) => {
   state.currentChannel = channel;
@@ -119,10 +148,16 @@ const renderMessages = () => {
   const messagesContainer = document.getElementById('messages');
   messagesContainer.innerHTML = '';
 
-  state.messages.forEach(element => {
-    let message = renderMessage(element);
-    messagesContainer.appendChild(message);
-  })
+  if (state.messages.length === 0) {
+    messagesContainer.innerHTML = `Let's write the first message to the channel!`;
+  } else {
+    state.messages.forEach(element => {
+      let message = renderMessage(element);
+      messagesContainer.appendChild(message);
+    })
+  }
+
+
 
   messagesContainer.scrollIntoView(false); // scroll messages to the bottom
 };
@@ -156,7 +191,7 @@ const renderMessage = (obj) => {
 
   return m;
 };
-//---//
+//==== Activate Sockets ====//
 
 const activateSockets = () => {
   const socket = io();
