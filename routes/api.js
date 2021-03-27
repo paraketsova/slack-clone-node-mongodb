@@ -31,14 +31,9 @@ ApiRoutes.getMessages = async (req, res) => {
 };
 
 ApiRoutes.addChannel = async (req, res) => {
-  //const nameNewChannel = req.body.nameNewChannel;//взять введённое имя нового канала
-  //await ChannelModel.findOne({name: nameNewChannel}).exec(); //TODO: если канал с таким именем есть в БД - выдать ошибку
-  console.log('body', req.body);
   const newChannel = new ChannelModel(req.body);
   const dbNewChannel = await newChannel.save();
-  const newChannelId = dbNewChannel.id;
-  console.log(newChannelId)
-
+  res.json(dbNewChannel);
 };
 
 module.exports = ApiRoutes;

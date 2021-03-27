@@ -8,6 +8,7 @@ const state = {
 document.addEventListener("DOMContentLoaded", function (e) {
   loadUserInfo();
   loadChannels();
+  prepareNewChannelForm();
   activateSockets();
 });
 
@@ -27,8 +28,7 @@ const loadUserInfo = () => {
 };
 
 //=== Load  channels's container ===//
-
-const loadChannels = () => {
+const loadChannels = (openChannelId) => {
   fetch('/api/getChannels')
     .then(response => response.ok ? response.json() : null)
     .then(channels => {
@@ -37,8 +37,14 @@ const loadChannels = () => {
       renderChannels();
     })
     .then(channels => {
-      // Loading the first channel automatically
-      const channel = state.channels[0];
+      let channel;
+      if (openChannelId) {
+        // Loading the channel we got in parameter
+        channel = state.channels.find(c => c._id === openChannelId);
+      } else {
+        // Loading the first channel automatically
+        channel = state.channels[0];
+      }
       const id = channel._id;
       selectCurrentChannel(channel);
       loadChannelMessages(id);
@@ -75,54 +81,7 @@ const renderChannels = () => {
     channel.appendChild(channelLink);
     channelsContainer.appendChild(channel);
   })
-
-  //=== Add new channel ===//
-  addNewChannel();
 };
-
-const addNewChannel = () => {
-
-  btnAddChannel.addEventListener('click', (event) =>  {
-    let wrappNameNewChannel = document.getElementById("wrappNameNewChannel")
-    wrappNameNewChannel.innerHTML = '';
-    let btnAddChannel = document.getElementById('btnAddChannel');
-    let btnSaveChannel =document.getElementById('btnSaveChannel');
-
-    event.preventDefault();
-    btnAddChannel.style.visibility = "hidden";
-    let nameNewChannel = document.createElement('input');
-    nameNewChannel.type = 'text';
-    nameNewChannel.placeholder = `Add channel's name`;
-    nameNewChannel.id = 'nameNewChannel';
-    wrappNameNewChannel.appendChild(nameNewChannel);
-    btnSaveChannel.style.visibility = "visible";
-    //addNewChannel();
-  })
-  btnSaveChannel.addEventListener('click', (event) => {
-    event.preventDefault();
-
-    document.getElementById('nameNewChannel')
-    let nameText = nameNewChannel.value;
-    console.log(nameText);
-
-    fetch('/api/addChannel', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ name: nameText }),
-    })
-    .then(response => response.ok ? response.json() : null)
-    .then(channel => {
-      if (!channel) return;
-      console.log(channel);
-    });
-    btnAddChannel.style.visibility = "visible";
-    wrappNameNewChannel.innerHTML = '';
-    btnSaveChannel.style.visibility = "hidden";
-    loadChannels()
-  })
-}
 
 const selectCurrentChannel = (channel) => {
   state.currentChannel = channel;
@@ -157,8 +116,6 @@ const renderMessages = () => {
     })
   }
 
-
-
   messagesContainer.scrollIntoView(false); // scroll messages to the bottom
 };
 
@@ -191,6 +148,52 @@ const renderMessage = (obj) => {
 
   return m;
 };
+
+//=== Add new channel ===//
+const prepareNewChannelForm = () => {
+  btnAddChannel.addEventListener('click', (event) =>  {
+    let wrappNameNewChannel = document.getElementById("wrappNameNewChannel")
+    wrappNameNewChannel.innerHTML = '';
+    let btnAddChannel = document.getElementById('btnAddChannel');
+    let btnSaveChannel =document.getElementById('btnSaveChannel');
+
+    event.preventDefault();
+    btnAddChannel.style.visibility = "hidden";
+    let nameNewChannel = document.createElement('input');
+    nameNewChannel.type = 'text';
+    nameNewChannel.placeholder = `Add channel's name`;
+    nameNewChannel.id = 'nameNewChannel';
+    wrappNameNewChannel.appendChild(nameNewChannel);
+    btnSaveChannel.style.visibility = "visible";
+  })
+
+  btnSaveChannel.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    document.getElementById('nameNewChannel')
+    let nameText = nameNewChannel.value;
+    console.log(nameText);
+
+    fetch('/api/addChannel', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name: nameText }),
+    })
+      .then(response => response.ok ? response.json() : null)
+      .then(channel => {
+        if (!channel) return;
+
+        btnAddChannel.style.visibility = "visible";
+        wrappNameNewChannel.innerHTML = '';
+        btnSaveChannel.style.visibility = "hidden";
+        loadChannels(channel._id);
+      });
+  })
+}
+
+
 //==== Activate Sockets ====//
 
 const activateSockets = () => {
