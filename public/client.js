@@ -158,7 +158,7 @@ const prepareNewChannelForm = () => {
     let btnSaveChannel =document.getElementById('btnSaveChannel');
 
     event.preventDefault();
-    btnAddChannel.style.visibility = "hidden";
+    btnAddChannel.style.display = "none";
     let nameNewChannel = document.createElement('input');
     nameNewChannel.type = 'text';
     nameNewChannel.placeholder = `Add channel's name`;
@@ -185,7 +185,7 @@ const prepareNewChannelForm = () => {
       .then(channel => {
         if (!channel) return;
 
-        btnAddChannel.style.visibility = "visible";
+        btnAddChannel.style.display = "inline-block";
         wrappNameNewChannel.innerHTML = '';
         btnSaveChannel.style.visibility = "hidden";
         loadChannels(channel._id);

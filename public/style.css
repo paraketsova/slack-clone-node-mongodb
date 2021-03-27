@@ -148,18 +148,19 @@ input[type="file"] {
   color: #363135;
 }
 
-#addChannel {
-  padding-top: 1.5rem;
-}
-
 #addChannel div {
   display: block;
   padding: .5rem 0rem;
   text-decoration: none;
 }
 
+#btnAddChannel {
+  display: inline-block;
+}
+
 #btnSaveChannel {
   visibility: hidden;
+  margin-top: 0.5rem;
 }
 
 .channels ::placeholder {
