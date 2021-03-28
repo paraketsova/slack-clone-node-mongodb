@@ -195,6 +195,7 @@ const prepareNewChannelForm = () => {
         btnAddChannel.style.display = 'inline-block';
         wrappNameNewChannel.innerHTML = '';
         btnSaveChannel.style.visibility = 'hidden';
+        btnCancel.style.display = 'none';
         loadChannels(channel._id);
       });
   })
