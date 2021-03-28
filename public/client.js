@@ -215,10 +215,10 @@ const activateSockets = () => {
     const textInput = form.getElementsByTagName('input')[0];
     const filesInput = form.getElementsByTagName('input')[1];
 
-    if (textInput.value) {
-      // Here, `filesInput.files` is FileList - an Array-like object, but not Array. Let's make it a real Array:
-      const fileArray = Array.from(filesInput.files);
+    // Here, `filesInput.files` is FileList - an Array-like object, but not Array. Let's make it a real Array:
+    const fileArray = Array.from(filesInput.files);
 
+    if (textInput.value.length > 0 || fileArray.length > 0) {
       // Here, `fileArray` is array of File objects. Since Socket.io serialize File object as Buffer
       // (losing all the metadata along the way), let's reformat every File into simple Object,
       // where the original File will be just one of the Object's properties. This way all metadata
