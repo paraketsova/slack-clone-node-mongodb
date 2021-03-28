@@ -148,23 +148,24 @@ input[type="file"] {
   color: #363135;
 }
 
-#addChannel div {
-  display: block;
-  padding: .5rem 0rem;
-  text-decoration: none;
+#btnAddChannel {
+  margin-top: 0.5rem;
 }
 
-#btnAddChannel {
-  display: inline-block;
+#newChannelForm {
+  display: none;
+  width: 90%;
+}
+
+#nameNewChannel {
+  width: 80%;
 }
 
 #btnSaveChannel {
-  visibility: hidden;
   margin-top: 0.5rem;
 }
 
 #btnCancel {
-  display: none;
   margin-top: 0.5rem;
   background-color: rgb(151, 150, 150);
 }

@@ -29,12 +29,14 @@
   <section class="channels pt-2 ps-3">
     <h3>Channels:</h3>
     <div id="channels"></div>
-    <form class="mt-2" enctype="multipart/form-data">
-      <a id="btnAddChannel" class="btn btn-light btn-sm">Add new channel</a>
-      <div id="wrappNameNewChannel"></div>
-      <button id="btnSaveChannel" type="submit" class="btn btn-light btn-sm">Save channel</button>
+    <button id="btnAddChannel" class="btn btn-light btn-sm">Add new channel</button>
+    <form class="mt-2" id="newChannelForm">
+      <input type="text" placeholder="Add channel's name" id="nameNewChannel"/>
+      <div class="row">
+        <div class="col"><button id="btnSaveChannel" type="submit" class="btn btn-light btn-sm">Save channel</button></div>
+        <div class="col"><button id="btnCancel" class="btn btn-light btn-sm">Cancel</button></div>
+      </div>
       <div id="errorMessage" class=" alert alert-warning"></div>
-      <button id="btnCancel" class="btn btn-light btn-sm">Cancel</button>
     </form>
   </section>
 

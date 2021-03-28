@@ -150,58 +150,55 @@ const renderMessage = (obj) => {
 
 //=== Add new channel ===//
 const prepareNewChannelForm = () => {
-  const wrappNameNewChannel = document.getElementById('wrappNameNewChannel')
+  const newChannelForm = document.getElementById('newChannelForm')
   const btnAddChannel = document.getElementById('btnAddChannel');
+  const nameNewChannel = document.getElementById('nameNewChannel')
   const btnSaveChannel = document.getElementById('btnSaveChannel');
   const btnCancel = document.getElementById('btnCancel');
   const errorMessage = document.getElementById('errorMessage');
-  wrappNameNewChannel.innerHTML = '';
 
   btnAddChannel.addEventListener('click', (event) =>  {
     event.preventDefault();
-    btnAddChannel.style.display = "none";
-    let nameNewChannel = document.createElement('input');
-    nameNewChannel.type = 'text';
-    nameNewChannel.placeholder = `Add channel's name`;
-    nameNewChannel.id = 'nameNewChannel';
-    wrappNameNewChannel.appendChild(nameNewChannel);
-    btnSaveChannel.style.visibility = "visible";
-    btnCancel.style.display = "block";
-  })
+    btnAddChannel.style.display = 'none';
+    newChannelForm.style.display = 'block';
+    errorMessage.style.display = 'none';
+    errorMessage.innerHTML = '';
+  });
 
   btnSaveChannel.addEventListener('click', (event) => {
     event.preventDefault();
     errorMessage.style.display = 'none';
-
-    document.getElementById('nameNewChannel')
-    let nameText = nameNewChannel.value;
 
     fetch('/api/addChannel', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ name: nameText }),
+      body: JSON.stringify({ name: nameNewChannel.value }),
     })
       .then(response => response.ok ? response.json() : null)
       .then(channel => {
         if (channel.error) {
+          errorMessage.style.display = 'inline-block';
           if (channel.error.code === 11000) {
-            errorMessage.style.display = 'inline-block';
             errorMessage.innerHTML = `Error: channel with the same name already exists`;
+          } else {
+            errorMessage.innerHTML = `Error: Database error`;
           }
           return;
         }
-        btnAddChannel.style.display = 'inline-block';
-        wrappNameNewChannel.innerHTML = '';
-        btnSaveChannel.style.visibility = 'hidden';
-        btnCancel.style.display = 'none';
+        nameNewChannel.value = '';
+        newChannelForm.style.display = 'none';
+        btnAddChannel.style.display = 'inline';
         loadChannels(channel._id);
       });
   })
 
   btnCancel.addEventListener('click', (event) => {
-    wrappNameNewChannel.innerHTML = '';
+    event.preventDefault();
+    nameNewChannel.value = '';
+    newChannelForm.style.display = 'none';
+    btnAddChannel.style.display = 'inline';
   })
 }
 
