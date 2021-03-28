@@ -71,7 +71,7 @@ const renderChannels = () => {
       selectCurrentChannel(element);
       loadChannelMessages(element._id);
     });
-    channelLink.href = '#'; // TODO: remove after adding CSS
+    channelLink.href = '#';
     channelLink.innerText = element.name;
 
     let channel = document.createElement('li');

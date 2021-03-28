@@ -29,7 +29,7 @@ const PageRoutes = require('./routes/pages');
 const UserRoutes = require('./routes/users');
 const ApiRoutes = require('./routes/api');
 
-const app = express(); //skapa obj av express module
+const app = express();
 
 
 const expressEjsLayout = require('express-ejs-layouts'); // layout support for ejs in express
