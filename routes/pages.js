@@ -12,28 +12,4 @@ PageRoutes.root = (req, res) => {
   }
 };
 
-//--- mdb ---//
-PageRoutes.mdb = (req, res) => { //TODO - delete if delete mdb page
-  ChannelModel
-  .find()
-  .exec((error, channels) => {
-    if (error) {
-      return handleError(error);
-    }
-    MessageModel
-    .find()
-    .populate(['channel', 'user']) //populates the channel id with actual channel info
-    .exec((error, messages) => {
-      if (error) {
-        return handleError(error);
-      }
-
-      console.log(messages);
-      res.render('mdb.ejs', { channels, messages });
-    })
-  })
-};
-
-//==== ====//
-
 module.exports = PageRoutes;
