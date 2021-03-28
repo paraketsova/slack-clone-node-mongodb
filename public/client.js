@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function (e) {
   activateSockets();
 });
 
-
 //=== Load user's info ===//
 
 const loadUserInfo = () => {
@@ -151,12 +150,14 @@ const renderMessage = (obj) => {
 
 //=== Add new channel ===//
 const prepareNewChannelForm = () => {
-  btnAddChannel.addEventListener('click', (event) =>  {
-    let wrappNameNewChannel = document.getElementById('wrappNameNewChannel')
-    wrappNameNewChannel.innerHTML = '';
-    let btnAddChannel = document.getElementById('btnAddChannel');
-    let btnSaveChannel =document.getElementById('btnSaveChannel');
+  const wrappNameNewChannel = document.getElementById('wrappNameNewChannel')
+  const btnAddChannel = document.getElementById('btnAddChannel');
+  const btnSaveChannel = document.getElementById('btnSaveChannel');
+  const btnCancel = document.getElementById('btnCancel');
+  const errorMessage = document.getElementById('errorMessage');
+  wrappNameNewChannel.innerHTML = '';
 
+  btnAddChannel.addEventListener('click', (event) =>  {
     event.preventDefault();
     btnAddChannel.style.display = "none";
     let nameNewChannel = document.createElement('input');
@@ -165,15 +166,15 @@ const prepareNewChannelForm = () => {
     nameNewChannel.id = 'nameNewChannel';
     wrappNameNewChannel.appendChild(nameNewChannel);
     btnSaveChannel.style.visibility = "visible";
+    btnCancel.style.display = "block";
   })
 
   btnSaveChannel.addEventListener('click', (event) => {
     event.preventDefault();
+    errorMessage.style.display = 'none';
 
     document.getElementById('nameNewChannel')
     let nameText = nameNewChannel.value;
-    console.log(nameText);
-    let errorMessage = document.getElementById('errorMessage');
 
     fetch('/api/addChannel', {
       method: 'post',
@@ -185,19 +186,21 @@ const prepareNewChannelForm = () => {
       .then(response => response.ok ? response.json() : null)
       .then(channel => {
         if (channel.error) {
-          console.log(channel.error);
           if (channel.error.code === 11000) {
-            errorMessage.style.display = "inline-block"
+            errorMessage.style.display = 'inline-block';
             errorMessage.innerHTML = `Error: channel with the same name already exists`;
           }
           return;
         }
-
-        btnAddChannel.style.display = "inline-block";
+        btnAddChannel.style.display = 'inline-block';
         wrappNameNewChannel.innerHTML = '';
-        btnSaveChannel.style.visibility = "hidden";
+        btnSaveChannel.style.visibility = 'hidden';
         loadChannels(channel._id);
       });
+  })
+
+  btnCancel.addEventListener('click', (event) => {
+    wrappNameNewChannel.innerHTML = '';
   })
 }
 
