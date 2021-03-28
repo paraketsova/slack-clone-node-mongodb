@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const ChannelSchema = new Schema({
   name: {
     type: String,
-    unique: false,
+    unique: true,
     required: true,
   },
 });

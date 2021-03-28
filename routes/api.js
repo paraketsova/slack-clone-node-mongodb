@@ -30,10 +30,16 @@ ApiRoutes.getMessages = async (req, res) => {
   res.json(messages);
 };
 
-ApiRoutes.addChannel = async (req, res) => {
+ApiRoutes.addChannel = async (req, res)  => {
   const newChannel = new ChannelModel(req.body);
-  const dbNewChannel = await newChannel.save();
-  res.json(dbNewChannel);
-};
+  newChannel.save()
+    .then((dbNewChannel) => {
+      res.json(dbNewChannel);
+    })
+    .catch(error => {
+      console.log(`Database error: ${error.message}`);
+      res.json({ error });
+    });
+}
 
 module.exports = ApiRoutes;

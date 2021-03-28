@@ -167,3 +167,9 @@ input[type="file"] {
   font-size: small;
   font-style: italic;
 }
+
+#errorMessage {
+  display: none;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+}

@@ -152,7 +152,7 @@ const renderMessage = (obj) => {
 //=== Add new channel ===//
 const prepareNewChannelForm = () => {
   btnAddChannel.addEventListener('click', (event) =>  {
-    let wrappNameNewChannel = document.getElementById("wrappNameNewChannel")
+    let wrappNameNewChannel = document.getElementById('wrappNameNewChannel')
     wrappNameNewChannel.innerHTML = '';
     let btnAddChannel = document.getElementById('btnAddChannel');
     let btnSaveChannel =document.getElementById('btnSaveChannel');
@@ -173,6 +173,7 @@ const prepareNewChannelForm = () => {
     document.getElementById('nameNewChannel')
     let nameText = nameNewChannel.value;
     console.log(nameText);
+    let errorMessage = document.getElementById('errorMessage');
 
     fetch('/api/addChannel', {
       method: 'post',
@@ -183,7 +184,14 @@ const prepareNewChannelForm = () => {
     })
       .then(response => response.ok ? response.json() : null)
       .then(channel => {
-        if (!channel) return;
+        if (channel.error) {
+          console.log(channel.error);
+          if (channel.error.code === 11000) {
+            errorMessage.style.display = "inline-block"
+            errorMessage.innerHTML = `Error: channel with the same name already exists`;
+          }
+          return;
+        }
 
         btnAddChannel.style.display = "inline-block";
         wrappNameNewChannel.innerHTML = '';
