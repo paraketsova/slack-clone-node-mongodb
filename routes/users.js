@@ -16,6 +16,10 @@ UserRoutes.signupPost = async (req, res) => {
     errors.push("Please fill out all fields");
   }
 
+  if (username.includes('@')) {
+    errors.push(`Character "@" is not allowed in username`)
+  }
+
   if (password.length < 6) {
     errors.push("Use at least 6 characters for your password");
   }

@@ -5,8 +5,13 @@ const bcrypt = require('bcrypt'); //for encrypting pass. before you store in Mon
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    // TODO: add support for logging in with email
-    UserModel.findOne({ username: username }, async function(error, user) {
+    let condition;
+    if (username.includes('@')) {
+      condition = { email: username }
+    } else {
+      condition = { username: username }
+    }
+    UserModel.findOne(condition, async function(error, user) {
       if (error) {
         return done(error);
       }
