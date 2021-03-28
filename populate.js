@@ -146,18 +146,6 @@ function createUsersChannelsAttachments(cb) {
     },
     function (callback) {
       channelCreate('Warmest', callback);
-    },
-    function (callback) {
-      attachmentCreate("joke1.png", "image/png", 914344, callback);
-    },
-    function (callback) {
-      attachmentCreate("cows_1.jpg", "image/jpeg", 858584, callback);
-    },
-    function (callback) {
-      attachmentCreate("cows_2.png", "image/png", 846712, callback);
-    },
-    function (callback) {
-      attachmentCreate("cows_3.jpg", "image/jpeg", 544356, callback);
     }
   ],
   // optional callback
@@ -167,10 +155,10 @@ function createUsersChannelsAttachments(cb) {
 function createMessages(cb) {
   async.parallel([
     function (callback) {
-      messageCreate(users[0], channels[0], "2021-03-02 13:14:51", "My dog used to chase people on a bike a lot. It got so bad I had to take his bike away", [attachments[0]], callback);
+      messageCreate(users[0], channels[0], "2021-03-02 13:14:51", "My dog used to chase people on a bike a lot. It got so bad I had to take his bike away", [], callback);
     },
     function (callback) {
-      messageCreate(users[1], channels[1], "2021-03-02 13:14:52", "What kind of magic do cows believe in? MOODOO.",  [attachments[1], attachments[2], attachments[3]], callback);
+      messageCreate(users[1], channels[1], "2021-03-02 13:14:52", "What kind of magic do cows believe in? MOODOO.",  [], callback);
     },
     function (callback) {
       messageCreate(users[2], channels[2], "2021-03-02 13:14:55", "What do you call someone with no nose? Nobody knows.", [], callback);
